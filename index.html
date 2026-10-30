@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#171717" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="ROMA/WALK" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>ROMA / WALK — 로마 건축 탐험</title>
+<script>(function(){var t;try{t=localStorage.getItem('romaWalkTheme')}catch(e){}if(t!=='dark'&&t!=='light')t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';document.documentElement.dataset.theme=t})()</script>
+<style>
+  :root{--bg:#f6f6f3;--paper:#fff;--ink:#171717;--muted:#777;--line:#d8d8d3;--soft:#ecece8;--dark:#171717;--radius:2px}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;letter-spacing:-.025em}
+  button,input,select{font:inherit} button{cursor:pointer}
+  .app{max-width:1440px;margin:0 auto;min-height:100vh;background:var(--paper);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .topbar{height:74px;border-bottom:1px solid var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 34px;gap:20px}
+  .brand{display:flex;align-items:baseline;gap:12px;white-space:nowrap}.brand strong{font-size:20px;letter-spacing:.08em}.brand span{font-size:10px;color:var(--muted);letter-spacing:.16em}
+  .nav{display:flex;gap:26px;align-items:center}.nav button{border:0;background:none;padding:9px 0;color:#666;font-size:13px;border-bottom:1px solid transparent}.nav button.active{color:var(--ink);border-color:var(--ink);font-weight:700}
+  .lang{border:1px solid var(--ink);background:white;padding:8px 11px;font-size:11px;letter-spacing:.08em}
+  main{padding:0 34px 50px}
+  .eyebrow{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .hero{padding:35px 0 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:30px;align-items:end}
+  h1{font-size:clamp(32px,4vw,58px);line-height:1.02;letter-spacing:-.065em;margin:12px 0 12px;font-weight:700}
+  .hero p{font-size:14px;color:#666;line-height:1.7;max-width:510px;margin:0}
+  .hero-stamp{border:1px solid var(--ink);padding:14px 16px;min-width:120px;text-align:center;font-size:10px;line-height:1.7;letter-spacing:.12em}
+  .hero-stamp b{font-size:20px;display:block;letter-spacing:-.05em}
+  .section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:28px 0 15px}
+  h2{font-size:21px;margin:0;letter-spacing:-.05em} .sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .text-btn{border:0;background:none;text-decoration:underline;text-underline-offset:4px;font-size:12px;color:var(--ink);padding:8px 0}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 16px}
+  .chip{border:1px solid var(--line);background:white;padding:9px 13px;font-size:12px;color:#555}.chip.active{background:var(--ink);border-color:var(--ink);color:white}
+  .explore-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(330px,.88fr);gap:16px}
+  .map-panel{min-height:400px;border:1px solid var(--ink);background:#f0f0ed;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;overflow:hidden}
+  .map-panel:before,.map-panel:after{content:"";position:absolute;border:1px solid #d7d7d2;border-radius:50%;width:310px;height:310px;transform:rotate(-25deg)}.map-panel:after{width:450px;height:210px;transform:rotate(28deg)}
+  .map-placeholder{position:relative;z-index:1;max-width:320px}
+  .map-placeholder .map-icon{font-size:34px;margin-bottom:13px}
+  .map-placeholder strong{font-size:15px;display:block;margin-bottom:8px}
+  .map-placeholder p{font-size:12px;line-height:1.7;color:#777;margin:0}
+  .map-tag{position:absolute;z-index:2;top:14px;left:14px;background:white;border:1px solid var(--line);padding:8px 10px;font-size:10px;letter-spacing:.1em}
+  .map-zoom{position:absolute;right:14px;bottom:14px;z-index:2;display:grid;border:1px solid var(--line)}.map-zoom button{background:white;border:0;width:34px;height:34px;font-size:18px}.map-zoom button+button{border-top:1px solid var(--line)}
+  .side-list{border-top:1px solid var(--ink)}
+  .place-row{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .place-row:hover .place-name{text-decoration:underline;text-underline-offset:3px}
+  .num{font-size:11px;color:var(--muted);align-self:start;padding-top:3px}
+  .place-name{font-size:14px;font-weight:700}.place-meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}.arrow{font-size:17px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:38px}
+  .panel{border-top:1px solid var(--ink);padding-top:15px}
+  .route-card{display:flex;justify-content:space-between;gap:14px;padding:17px 0;border-bottom:1px solid var(--line);align-items:center}
+  .route-card strong{font-size:14px}.route-card p{margin:6px 0 0;font-size:11px;color:var(--muted);line-height:1.5}
+  .route-badge{font-size:10px;border:1px solid var(--line);padding:7px 8px;white-space:nowrap}
+  .outline-btn,.solid-btn{border:1px solid var(--ink);padding:11px 14px;font-size:12px;background:white;color:var(--ink)}
+  .solid-btn{background:var(--ink);color:white}.outline-btn:hover{background:var(--soft)}.solid-btn:hover{background:#444}
+  .full{width:100%;margin-top:15px}
+  .page{display:none}.page.active{display:block}
+  .page-intro{padding:30px 0 24px;border-bottom:1px solid var(--line)}.page-intro h1{font-size:42px}
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0}.search{flex:1;min-width:200px;padding:12px;border:1px solid var(--line);background:#fafaf8}
+  .catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:0 22px}
+  .catalog .place-row{grid-template-columns:34px 1fr auto}
+  .detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding-top:28px}
+  .detail-visual{min-height:360px;background:var(--soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;color:#777}
+  .detail-visual strong{display:block;color:var(--ink);font-size:13px;margin-bottom:8px}
+  .detail-copy h2{font-size:35px;line-height:1.1;margin:12px 0}
+  .detail-copy p{font-size:13px;line-height:1.9;color:#555}
+  .fact-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line);margin:22px 0}
+  .fact{padding:12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.fact span{display:block;color:var(--muted);font-size:10px;margin-bottom:6px}.fact b{font-size:12px}
+  .route-builder{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;margin-top:24px}
+  .route-stop{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+  .stop-controls{display:flex;gap:4px}.stop-controls button{border:1px solid var(--line);background:white;width:27px;height:27px}
+  .recommend-box{border:1px solid var(--ink);padding:18px;height:max-content}.recommend-box h3{font-size:15px;margin:0 0 8px}.recommend-box p{font-size:12px;line-height:1.7;color:#666}
+  .food-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.food-row small{display:block;color:var(--muted);margin-top:5px}
+  .community-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+  .community-card{border:1px solid var(--line);padding:17px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between}
+  .community-card .route-number{font-size:10px;letter-spacing:.12em;color:var(--muted)}.community-card h3{font-size:18px;line-height:1.3;margin:12px 0}.community-card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.community-card footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-size:11px}
+  .notice{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:11px;line-height:1.7}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#171717;color:white;padding:12px 18px;font-size:12px;display:none;z-index:10}
+  footer.site-footer{border-top:1px solid var(--ink);padding:20px 34px;display:flex;justify-content:space-between;color:var(--muted);font-size:10px;letter-spacing:.08em}
+  @media all{.topbar{padding:0 18px;height:auto;min-height:68px;flex-wrap:wrap}.nav{order:3;width:100%;overflow:auto;gap:18px}.nav button{white-space:nowrap}main{padding:0 18px 35px}.hero{align-items:start}.hero-stamp{display:none}.explore-grid,.two-col,.detail-layout,.route-builder{grid-template-columns:1fr}.catalog{grid-template-columns:1fr 1fr}.community-grid{grid-template-columns:1fr 1fr}.map-panel{min-height:300px}.recommend-box{order:-1}footer.site-footer{padding:18px}}
+  @media all{.brand span{display:none}.hero{padding-top:25px}.hero p{font-size:12px}.catalog,.community-grid{grid-template-columns:1fr}.page-intro h1{font-size:34px}.detail-copy h2{font-size:29px}.section-head{align-items:start}.section-head .text-btn{white-space:nowrap}}
+
+  .map-panel.live{display:block;padding:0;text-align:left}
+  .map-panel.live:before,.map-panel.live:after{display:none}
+  .gmap{position:absolute;inset:0;width:100%;height:100%}
+  .map-msg{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;font-size:12px;line-height:1.7;color:var(--muted);background:#f0f0ed;pointer-events:none}
+  .map-msg.err{color:var(--ink);pointer-events:auto}
+  .map-ctrl{position:absolute;left:14px;top:54px;z-index:2;display:flex;border:1px solid var(--ink);background:#fff}
+  .map-ctrl button{border:0;background:#fff;padding:8px 11px;font-size:11px;letter-spacing:.04em}
+  .map-ctrl button+button{border-left:1px solid var(--line)}
+  .map-ctrl button:hover{background:var(--soft)}
+  .place-row.sel{background:var(--bg);box-shadow:inset 3px 0 0 var(--ink);padding-left:12px;padding-right:8px}
+  .modal-bg{position:fixed;inset:0;background:rgba(23,23,23,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+  .modal{background:#fff;border:1px solid var(--ink);padding:26px;width:100%;max-width:460px}
+  .key-row{display:flex;gap:8px;margin:14px 0 10px}.key-row .search{flex:1;min-width:0}
+  .key-err{color:#b00020;font-size:12px;min-height:16px;margin-top:6px}
+  .modal-actions{display:flex;gap:8px;align-items:center;margin-top:18px}
+  /* ---------- 모바일 앱 레이아웃 ---------- */
+  html{-webkit-text-size-adjust:100%}
+  body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+  @media all{
+    body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+    .app{border:0}
+    .topbar{position:sticky;top:0;z-index:40;background:#fff;min-height:56px;padding:env(safe-area-inset-top) 16px 0;flex-wrap:nowrap}
+    .brand strong{font-size:17px}
+    .lang{padding:9px 10px;min-height:40px}
+    .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:50;width:100%;max-width:430px;order:0;background:#fff;border-top:1px solid var(--ink);gap:0;justify-content:space-around;padding:0 0 env(safe-area-inset-bottom);overflow:visible}
+    .nav button{flex:1;padding:9px 0 8px;font-size:10px;letter-spacing:.02em;border-bottom:0;border-top:2px solid transparent;min-height:56px;white-space:normal;line-height:1.3}
+    .nav button.active{border-top-color:var(--ink)}
+    .nav button::before{display:block;font-size:18px;line-height:1.2;margin-bottom:2px}
+    .nav button[data-page=home]::before{content:'◎'}
+    .nav button[data-page=places]::before{content:'▦'}
+    .nav button[data-page=routes]::before{content:'⌁'}
+    .nav button[data-page=community]::before{content:'☰'}
+    .chip,.outline-btn,.solid-btn,.text-btn{min-height:40px}
+    .map-panel.live{min-height:56vh}
+    .toast{bottom:calc(76px + env(safe-area-inset-bottom));max-width:calc(100% - 32px)}
+    footer.site-footer{flex-direction:column;gap:6px;padding-bottom:18px}
+    .modal-bg{align-items:flex-end;padding:0}
+    .modal{max-width:none;border-width:1px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom))}
+    input,select{font-size:16px}
+    .stop-controls button{width:36px;height:36px}
+  }
+  a.place-row{color:inherit;text-decoration:none}
+  .route-card>div{min-width:0}
+  .route-card .outline-btn,.community-card footer .outline-btn{flex:none;white-space:nowrap}
+  .food-row[data-food]{cursor:pointer}.food-row[data-food]:hover b{text-decoration:underline;text-underline-offset:3px}
+  /* ---------- 다크 모드 ---------- */
+  :root[data-theme=dark]{--bg:#121212;--paper:#1a1a1a;--ink:#f2f2ee;--muted:#9a9a95;--line:#34342f;--soft:#262624;color-scheme:dark}
+  [data-theme=dark] button,[data-theme=dark] input,[data-theme=dark] select{color:var(--ink)}
+  [data-theme=dark] .topbar,[data-theme=dark] .nav{background:var(--paper)}
+  [data-theme=dark] .nav button{color:#9a9a95}
+  [data-theme=dark] .nav button.active{color:var(--ink)}
+  [data-theme=dark] .lang,[data-theme=dark] .outline-btn,[data-theme=dark] .stop-controls button,[data-theme=dark] .map-tag,[data-theme=dark] .map-ctrl,[data-theme=dark] .map-ctrl button{background:var(--paper)}
+  [data-theme=dark] .chip{background:var(--paper);color:#bdbdb8}
+  [data-theme=dark] .chip.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  [data-theme=dark] .hero p,[data-theme=dark] .detail-copy p,[data-theme=dark] .recommend-box p{color:#b5b5b0}
+  [data-theme=dark] .map-panel,[data-theme=dark] .map-panel.live,[data-theme=dark] .map-msg{background:#1f1f1d}
+  [data-theme=dark] .map-panel:before,[data-theme=dark] .map-panel:after{border-color:#34342f}
+  [data-theme=dark] .map-ctrl button:hover,[data-theme=dark] .outline-btn:hover{background:var(--soft)}
+  [data-theme=dark] .search{background:#202020}
+  [data-theme=dark] .solid-btn{background:var(--ink);color:var(--paper)}
+  [data-theme=dark] .solid-btn:hover{background:#cfcfca}
+  [data-theme=dark] .toast{background:#f2f2ee;color:#171717}
+  [data-theme=dark] .modal{background:var(--paper)}
+  [data-theme=dark] .key-err{color:#ff8a80}
+  [data-theme=dark] .place-row.sel{background:var(--soft)}
+  [data-theme=dark] .detail-visual{color:#9a9a95}
+  .iw{--ink:#171717;--paper:#fff;--line:#d8d8d3;--soft:#ecece8;--muted:#777}
+  #themeBtn{width:40px;padding:0;font-size:16px;line-height:1}
+  /* ---------- 폰 화면 고정 ---------- */
+  .app{max-width:430px;overflow-x:clip}
+  .route-builder,.explore-grid,.detail-layout,.two-col{grid-template-columns:minmax(0,1fr)}
+  .route-builder>*,.explore-grid>*,.detail-layout>*,.two-col>*{min-width:0}
+  .modal{max-width:430px}
+  @media(min-width:500px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line);box-shadow:0 0 40px rgba(0,0,0,.08)}}
+  .leg{font-size:11px;margin-top:7px;color:var(--ink)}
+  .iw{font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;min-width:190px;color:#171717;letter-spacing:-.02em}
+  .iw-n{font-size:10px;letter-spacing:.12em;color:#777;margin-bottom:6px;text-transform:uppercase}
+  .iw b{font-size:14px}.iw p{font-size:12px;color:#666;margin:6px 0 10px}
+  .iw-actions{display:flex;gap:6px}.iw-actions button{flex:1;padding:9px 10px;font-size:11px;white-space:nowrap}
+  .iw-n{padding-right:22px;line-height:1.5}
+  .iw b{display:block;line-height:1.3}
+  .gm-style .gm-style-iw-c{padding:0!important;border-radius:2px!important;border:1px solid #171717;box-shadow:0 6px 20px rgba(0,0,0,.25)!important;max-width:min(260px,calc(100vw - 80px))!important}
+  .gm-style .gm-style-iw-d{padding:14px 14px 12px!important;overflow:hidden!important;max-height:none!important}
+  .gm-style .gm-ui-hover-effect{width:26px!important;height:26px!important;top:6px!important;right:6px!important}
+  .gm-style .gm-ui-hover-effect>span{width:14px!important;height:14px!important;margin:6px!important;background-color:#171717!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><strong>ROMA / WALK</strong><span>ARCHITECTURE · CITY · STORIES</span></div>
+    <nav class="nav" aria-label="주요 메뉴">
+      <button class="active" data-page="home">탐색</button>
+      <button data-page="places">명소 아카이브</button>
+      <button data-page="routes">나의 경로</button>
+      <button data-page="community">추천 경로</button>
+    </nav>
+    <div style="display:flex;gap:8px"><button class="lang" id="themeBtn" type="button">☾</button><button class="lang" id="keyBtn" type="button" aria-haspopup="dialog">⚙ MAP KEY</button><button class="lang" id="langBtn">KR / EN</button></div>
+  </header>
+  <main>
+    <section class="page active" id="home">
+      <div class="hero">
+        <div><div class="eyebrow">A WALK THROUGH ROME · ISSUE 01</div><h1>Walk closer.<br>See more.</h1><p>유명한 장소를 체크하는 여행에서, 도시의 이야기를 발견하는 산책으로. 건축과 골목, 그리고 그 사이의 장소들을 나만의 경로로 연결해 보세요.</p></div>
+        <div class="hero-stamp"><b>ROMA</b>41° 53′ N<br>12° 29′ E<br>FIELD GUIDE / 001</div>
+      </div>
+      <div class="section-head"><div><div class="eyebrow">01 / START WITH A MOOD</div><h2>오늘 어떤 로마를 걷고 싶나요?</h2><div class="sub">관심 테마를 선택하면 관련 장소를 모아볼 수 있어요.</div></div></div>
+      <div class="chips" id="themeChips">
+        <button class="chip active" data-theme="all">전체 보기</button><button class="chip" data-theme="architecture">건축과 역사</button><button class="chip" data-theme="hidden">숨은 골목</button><button class="chip" data-theme="art">예술과 광장</button><button class="chip" data-theme="food">카페와 식문화</button>
+      </div>
+      <div class="explore-grid">
+        <div class="map-panel live" aria-label="로마 지도">
+          <div class="gmap" id="homeMap"></div>
+          <div class="map-msg" id="homeMapMsg">지도를 불러오는 중…</div>
+          <span class="map-tag">ROMA · CENTRO STORICO</span>
+          <div class="map-ctrl"><button id="locateBtn" type="button">⌖ 현재 위치</button><button id="fitBtn" type="button">전체 보기</button></div>
+        </div>
+        <div><div class="section-head" style="margin-top:0"><div><div class="eyebrow">NEAR YOUR WALK</div><h2>도심의 발견</h2><div class="sub">판테온 · 나보나 광장 · 캄포 데 피오리 주변</div></div><button class="text-btn" data-goto="places">전체 보기 →</button></div><div class="side-list" id="homePlaces"></div><button class="solid-btn full" data-goto="routes">이 장소들로 경로 만들기 ↗</button></div>
+      </div>
+      <div class="two-col">
+        <section class="panel"><div class="eyebrow">02 / ROUTES BY PEOPLE</div><div class="section-head" style="margin-top:9px"><div><h2>사람들이 만든 산책</h2><div class="sub">다른 여행자의 시선으로 도시를 만나보세요.</div></div><button class="text-btn" data-goto="community">모두 보기 →</button></div><div id="homeRoutes"></div></section>
+        <section class="panel"><div class="eyebrow">03 / ALONG THE WAY</div><div class="section-head" style="margin-top:9px"><div><h2>걷는 길 위의 쉼표</h2><div class="sub">경로 근처에서 들르기 좋은 카페와 식당 아이디어</div></div></div><div id="homeFood"></div><div class="notice">※ 장소와 소개 문구는 서비스 콘셉트를 보여주기 위한 예시입니다. 영업 여부, 실제 거리, 혼잡도 및 추천 순위는 검증된 실시간 데이터가 아닙니다.</div></section>
+      </div>
+    </section>
+
+    <section class="page" id="places">
+      <div class="page-intro"><div class="eyebrow">PLACE INDEX / 01—</div><h1>Places with stories.</h1><p class="sub">로마의 건축물과 광장, 골목을 기록한 장소 아카이브</p></div>
+      <div class="toolbar"><input class="search" id="searchInput" placeholder="장소명 또는 키워드 검색 / Search places" /><select id="categorySelect" class="search" style="flex:0 1 190px"><option value="all">모든 테마</option><option value="architecture">건축과 역사</option><option value="hidden">숨은 골목</option><option value="art">예술과 광장</option><option value="food">카페와 식문화</option></select></div>
+      <div class="catalog" id="catalog"></div>
+      <div class="notice">소개는 탐험 경험을 위한 편집 콘텐츠 예시입니다. 방문 전 공식 자료를 통해 입장 가능 여부와 운영 정보를 확인하세요.</div>
+    </section>
+
+    <section class="page" id="detail">
+      <div class="page-intro"><button class="text-btn" data-goto="places">← 장소 목록으로</button><div class="eyebrow" id="detailEyebrow">PLACE FILE / 001</div></div>
+      <div class="detail-layout"><div class="detail-visual"><div><strong>PLACE IMAGE / ARCHIVE</strong>장소 사진이 들어갈 영역<br><small>실제 사진 또는 이미지 API 연결 예정</small></div></div><div class="detail-copy"><div class="eyebrow" id="detailCategory"></div><h2 id="detailTitle"></h2><div class="sub" id="detailAlt"></div><p id="detailDesc"></p><p id="detailStory"></p><div class="fact-grid" id="detailFacts"></div><button class="solid-btn" id="addFromDetail">+ 내 경로에 추가</button> <button class="outline-btn" data-goto="routes">경로 확인 →</button></div></div>
+      <section class="panel" style="margin-top:35px"><div class="eyebrow">NEARBY / ON THE WAY</div><div class="section-head"><div><h2>함께 둘러볼 만한 곳</h2><div class="sub">지도 연동 시 실제 경로 주변 반경을 기준으로 표시할 영역</div></div></div><div class="catalog" id="relatedPlaces"></div></section>
+    </section>
+
+    <section class="page" id="routes">
+      <div class="page-intro"><div class="eyebrow">ROUTE STUDIO / BUILD YOUR OWN</div><h1>Your route, your Rome.</h1><p class="sub">장소를 담고 순서를 바꿔 나만의 산책 코스를 만들어 보세요.</p></div>
+      <div class="route-builder"><div><div class="section-head" style="margin-top:0"><div><h2>나의 산책 순서</h2><div class="sub">장소를 추가한 뒤 위아래 버튼으로 순서를 조정할 수 있어요.</div></div><button class="text-btn" id="clearRoute">초기화</button></div><div class="map-panel live" style="min-height:340px;margin-bottom:20px" aria-label="도보 경로 지도"><div class="gmap" id="routeMap"></div><div class="map-msg" id="routeMapMsg">지도를 불러오는 중…</div><span class="map-tag">WALKING ROUTE</span></div><div id="routeStops"></div><div class="toolbar"><select id="addPlaceSelect" class="search"><option value="">장소 선택해서 추가</option></select><button class="solid-btn" id="addPlaceBtn">+ 장소 추가</button></div><button class="solid-btn" id="saveRoute">경로 저장하기</button> <button class="outline-btn" id="shareRoute">경로 공유</button></div>
+        <aside class="recommend-box"><div class="eyebrow">ROUTE NOTES</div><h3>산책에 필요한 작은 정보</h3><p>코스를 만든 뒤, 이동 흐름에 맞는 카페와 식당을 함께 살펴보세요.</p><div id="routeSummary"></div><div class="eyebrow" style="margin-top:25px">FOOD & COFFEE IDEAS</div><div id="routeFood"></div><div class="notice">추천은 예시 데이터이며, 경로와의 실제 거리·영업 상태는 확인되지 않았습니다.</div></aside>
+      </div>
+    </section>
+
+    <section class="page" id="community">
+      <div class="page-intro"><div class="eyebrow">COMMUNITY ROUTES / CURATED WALKS</div><h1>Rome, through others.</h1><p class="sub">관심사와 걷는 속도에 맞는 다른 사람들의 경로를 발견하고, 내 경로의 출발점으로 가져오세요.</p></div>
+      <div class="chips" id="routeFilters"><button class="chip active" data-routefilter="all">전체</button><button class="chip" data-routefilter="architecture">건축</button><button class="chip" data-routefilter="slow">느긋한 산책</button><button class="chip" data-routefilter="food">카페·식당</button></div>
+      <div class="community-grid" id="communityGrid"></div>
+      <div class="notice">이 화면의 경로는 서비스 시나리오를 위한 샘플입니다. 실제 이용자 작성 경로, 후기, 인기 순위가 아닙니다.</div>
+    </section>
+  <section class="page" id="food">
+      <div class="page-intro"><button class="text-btn" data-goto="home">← 탐색으로</button><div class="eyebrow" id="foodEyebrow"></div><h1 id="foodTitle"></h1><p class="sub" id="foodDesc"></p></div>
+      <div class="chips" id="foodTabs" style="margin-top:20px"></div>
+      <div class="section-head"><div><h2>경로 주변에서 찾아보기</h2><div class="sub" id="foodSrc"></div></div></div>
+      <div class="side-list" id="foodList"></div>
+      <div class="toolbar"><button class="solid-btn" data-goto="routes">내 경로 보기 →</button></div>
+      <div class="notice">검색은 Google 지도의 검색 결과로 연결되며, 추천이나 검증된 정보가 아닙니다. 영업 여부와 실제 거리는 지도에서 직접 확인해 주세요.</div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>ROMA / WALK — A FIELD GUIDE FOR CURIOUS WALKERS</span><span>CONCEPT PROTOTYPE · 2026</span></footer>
+</div>
+<div class="modal-bg" id="keyModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="keyTitle">
+    <div class="eyebrow">SETTINGS / GOOGLE MAPS</div>
+    <h2 id="keyTitle" style="margin-top:10px">Google Maps API 키</h2>
+    <p class="sub" style="line-height:1.7">키는 이 브라우저(localStorage)에만 저장되며 서버로 전송되지 않아요. 저장하면 페이지가 새로고침됩니다.</p>
+    <form id="keyForm" autocomplete="off">
+      <div class="key-row"><input id="keyInput" type="password" class="search" placeholder="AIza..." spellcheck="false" autocomplete="off"><button type="button" class="outline-btn" id="keyToggle">보기</button></div>
+      <div class="sub" id="keyState"></div>
+      <div class="key-err" id="keyError" role="alert"></div>
+      <div class="notice" style="margin-top:14px">Google Cloud 콘솔에서 Maps JavaScript API를 사용 설정하고, 도보 경로(Directions)를 쓰려면 해당 API도 켜 주세요. 키는 사용할 도메인(HTTP 리퍼러)으로 제한하는 것을 권장해요.</div>
+      <div class="modal-actions"><button type="button" class="text-btn" id="keyRemove">키 삭제</button><span style="flex:1"></span><button type="button" class="outline-btn" id="keyCancel">취소</button><button type="submit" class="solid-btn">저장</button></div>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const places = [
+ {id:'pantheon',n:'01',name:'판테온',en:'Pantheon',type:'architecture',label:'고대 건축 · 돔 구조',area:'Piazza della Rotonda',desc:'거대한 돔과 중앙의 오큘루스로 잘 알려진 로마의 대표적인 고대 건축물입니다. 내부 공간은 장식보다 비례와 빛의 움직임을 먼저 경험하게 합니다.',story:'광장에 도착하면 건물 정면만 보고 지나가기보다, 포르티코의 기둥과 둥근 돔이 만드는 대비를 천천히 살펴보세요. 날씨와 시간에 따라 빛이 내부에 들어오는 방식도 달라집니다.',facts:[['관찰 포인트','돔 · 오큘루스'],['추천 시선','정면과 내부 공간'],['탐험 테마','건축과 역사']],tags:['architecture','art']},
+ {id:'navona',n:'02',name:'나보나 광장',en:'Piazza Navona',type:'art',label:'바로크 · 도시의 무대',area:'Piazza Navona',desc:'길게 뻗은 광장 형태와 분수, 주변 건축의 조합이 인상적인 장소입니다. 광장은 이동 통로이면서 사람들이 머물고 바라보는 도시의 무대이기도 합니다.',story:'분수 주변에서 시선을 조금씩 옮겨 보세요. 광장의 길이와 열린 공간, 주변 파사드가 함께 읽힐 때 이곳이 단순한 명소가 아니라 도시의 방이라는 점이 드러납니다.',facts:[['관찰 포인트','분수 · 파사드'],['추천 시선','광장 전체의 형태'],['탐험 테마','예술과 광장']],tags:['art','architecture']},
+ {id:'campo',n:'03',name:'캄포 데 피오리',en:'Campo de’ Fiori',type:'hidden',label:'시장 광장 · 일상 풍경',area:'Campo de’ Fiori',desc:'역사적 중심지 안에서 일상의 움직임을 관찰하기 좋은 광장입니다. 주변 골목과 상점, 광장에 모이는 사람들의 활동이 장소의 분위기를 만듭니다.',story:'기념물을 보는 것만큼 주변의 작은 가게와 골목의 연결을 살펴보세요. 방문 시간에 따라 풍경이 달라질 수 있으므로, 현장에서 실제 운영 여부를 확인하는 편이 좋습니다.',facts:[['관찰 포인트','골목 · 상점 · 광장'],['추천 시선','일상의 흐름'],['탐험 테마','숨은 골목']],tags:['hidden','food']},
+ {id:'pietra',n:'04',name:'피아차 디 피에트라',en:'Piazza di Pietra',type:'architecture',label:'고대 유구 · 현대 도시',area:'Piazza di Pietra',desc:'고대 건축의 흔적이 오늘날의 도시 조직 안에 남아 있는 모습을 살펴볼 수 있는 광장입니다. 오래된 구조와 현재의 거리 풍경이 한 프레임에 겹쳐집니다.',story:'기둥의 반복과 주변 건물의 높이를 비교해 보세요. 과거의 건축이 독립된 유물이 아니라 현재의 거리와 함께 살아가는 모습을 관찰할 수 있습니다.',facts:[['관찰 포인트','기둥의 반복'],['추천 시선','고대와 현재의 대비'],['탐험 테마','건축과 역사']],tags:['architecture','hidden']},
+ {id:'ignazio',n:'05',name:'산티냐치오 광장',en:'Piazza di Sant’Ignazio',type:'art',label:'도시 공간 · 건축적 리듬',area:'Piazza di Sant’Ignazio',desc:'광장을 둘러싼 건물의 곡선적인 외관과 공간 구성이 독특한 인상을 주는 장소입니다. 작은 광장이 어떻게 시선을 모으고 머무름을 만드는지 관찰해 보세요.',story:'광장 가장자리에 서서 건물의 곡선과 창문 리듬을 바라보면, 공간이 시선을 중심으로 모으는 방식을 읽을 수 있습니다.',facts:[['관찰 포인트','곡선형 파사드'],['추천 시선','광장 가장자리에서 중앙으로'],['탐험 테마','예술과 광장']],tags:['art','architecture']},
+ {id:'argentina',n:'06',name:'라르고 디 토레 아르젠티나',en:'Largo di Torre Argentina',type:'hidden',label:'고고학 유적 · 도시의 층위',area:'Largo di Torre Argentina',desc:'도시 한복판에서 고고학적 유적과 현대의 교통·거리 풍경이 만나는 장소입니다. 로마의 시간이 여러 겹으로 쌓여 있다는 사실을 떠올리게 합니다.',story:'유적을 둘러싼 도로와 주변 건물을 함께 관찰해 보세요. 도시가 과거를 보존하는 방식과 현재의 일상이 공존하는 모습을 생각해 볼 수 있습니다.',facts:[['관찰 포인트','유적과 도로'],['추천 시선','거리 위에서 내려다보기'],['탐험 테마','숨은 골목']],tags:['hidden','architecture']},
+ {id:'colosseo',n:'07',name:'콜로세움',en:'Colosseum',type:'architecture',label:'고대 건축 · 원형 경기장',area:'Piazza del Colosseo',desc:'로마 제국 시대의 대표적인 원형 경기장으로, 오늘날에도 도시 한가운데서 거대한 규모를 드러냅니다. 아치가 반복되는 외벽은 구조와 리듬을 한눈에 보여 줍니다.',story:'가까이 다가가기 전에 멀리서 전체 윤곽을 먼저 바라보세요. 아치의 반복과 층마다 달라지는 표정을 비교하면 이 건물이 어떻게 사람들을 모으고 흐르게 했는지 상상할 수 있습니다.',facts:[['관찰 포인트','아치 · 외벽의 층'],['추천 시선','멀리서 본 전체 윤곽'],['탐험 테마','건축과 역사']],tags:['architecture']},
+ {id:'foro',n:'08',name:'포로 로마노',en:'Roman Forum',type:'architecture',label:'고대 유적 · 도시의 중심',area:'Via dei Fori Imperiali',desc:'고대 로마의 공공 생활이 이루어지던 중심지의 유적입니다. 무너진 기둥과 기단 사이를 걸으며 도시가 어떻게 쌓여 왔는지 읽을 수 있습니다.',story:'유적을 하나씩 확인하기보다 높은 곳에서 전체 배치를 먼저 바라보세요. 흩어진 기둥과 길의 방향이 하나의 도시 공간으로 이어지는 모습을 상상해 볼 수 있습니다.',facts:[['관찰 포인트','기둥 · 기단'],['추천 시선','높은 곳에서 본 전체 배치'],['탐험 테마','건축과 역사']],tags:['architecture','hidden']},
+ {id:'trevi',n:'09',name:'트레비 분수',en:'Trevi Fountain',type:'art',label:'바로크 · 분수',area:'Piazza di Trevi',desc:'좁은 골목을 지나 갑자기 열리는 광장 한쪽을 가득 채우는 분수입니다. 조각과 건물 외벽이 하나의 무대처럼 연결되어 있습니다.',story:'광장에 들어서는 순간의 대비를 기억해 두세요. 좁은 길에서 열린 공간으로 나오는 경험 자체가 이 장소의 연출의 일부입니다. 사람이 많을 수 있으니 이른 시간이나 늦은 시간을 고려해 보세요.',facts:[['관찰 포인트','조각 · 수면'],['추천 시선','골목에서 광장으로 들어서는 순간'],['탐험 테마','예술과 광장']],tags:['art','architecture']},
+ {id:'spagna',n:'10',name:'스페인 계단',en:'Spanish Steps',type:'art',label:'계단 · 도시의 동선',area:'Piazza di Spagna',desc:'언덕 위 성당과 아래 광장을 이어 주는 넓은 계단입니다. 계단은 이동 통로이면서 사람들이 앉아 도시를 바라보는 자리이기도 합니다.',story:'아래에서 위로, 다시 위에서 아래로 오르내리며 시야가 어떻게 달라지는지 비교해 보세요. 계단의 곡선과 단의 리듬이 만드는 흐름을 따라가면 도시의 높낮이가 보입니다.',facts:[['관찰 포인트','계단의 곡선 · 단의 리듬'],['추천 시선','아래와 위, 두 가지 시점'],['탐험 테마','예술과 광장']],tags:['art']},
+ {id:'peter',n:'11',name:'성 베드로 대성당',en:'St. Peter’s Basilica',type:'architecture',label:'대성당 · 열린 광장',area:'Piazza San Pietro',desc:'바티칸에 자리한 거대한 대성당과 그 앞의 타원형 광장입니다. 광장의 열주가 두 팔처럼 방문객을 감싸며 성당으로 시선을 이끕니다.',story:'광장 한가운데에서 열주의 곡선과 성당 정면, 돔을 차례로 바라보세요. 건물이 아니라 광장 전체가 하나의 건축이라는 점이 느껴집니다. 입장 규칙과 복장 기준은 방문 전에 공식 정보로 확인하세요.',facts:[['관찰 포인트','열주 · 돔'],['추천 시선','광장 중앙에서 정면으로'],['탐험 테마','건축과 역사']],tags:['architecture','art']},
+ {id:'angelo',n:'12',name:'산탄젤로 성',en:'Castel Sant’Angelo',type:'architecture',label:'요새 · 강변 풍경',area:'Lungotevere Castello',desc:'테베레 강변에 서 있는 원통형 요새로, 다리와 함께 도시의 강변 풍경을 만듭니다.',story:'다리 위에서 성을 바라보면 강과 둑, 건물의 높이가 한 화면에 겹칩니다. 이동 중에 잠시 멈춰 도시가 강을 어떻게 대하는지 살펴보세요.',facts:[['관찰 포인트','원통형 구조 · 다리'],['추천 시선','다리 위에서 바라본 성'],['탐험 테마','건축과 역사']],tags:['architecture','hidden']},
+ {id:'campidoglio',n:'13',name:'캄피돌리오 광장',en:'Piazza del Campidoglio',type:'art',label:'광장 · 계획된 공간',area:'Piazza del Campidoglio',desc:'언덕 위에서 건물들이 광장을 둘러싸며 질서 있는 공간을 만듭니다. 바닥의 무늬와 건물의 배치가 함께 읽히는 계획된 광장입니다.',story:'계단을 올라 광장에 들어서면 바닥의 패턴을 먼저 내려다보세요. 좌우대칭에 가까운 구성이 시선을 중심으로 모으는 방식을 확인할 수 있습니다.',facts:[['관찰 포인트','바닥 무늬 · 건물 배치'],['추천 시선','계단 위에서 광장 중앙으로'],['탐험 테마','예술과 광장']],tags:['art','architecture']},
+ {id:'bocca',n:'14',name:'진실의 입',en:'Bocca della Verità',type:'hidden',label:'성당 회랑 · 작은 명소',area:'Piazza della Bocca della Verità',desc:'성당 회랑 한쪽에 놓인 둥근 대리석 조각으로 알려진 작은 명소입니다. 규모는 작지만 사람들이 줄을 서서 기다리는 풍경이 장소의 일부가 됩니다.',story:'조각 자체보다 주변 광장과 성당의 종탑, 오가는 사람들의 흐름을 함께 관찰해 보세요. 방문 시간에 따라 대기 시간이 달라질 수 있습니다.',facts:[['관찰 포인트','회랑 · 종탑'],['추천 시선','조각 주변의 사람들'],['탐험 테마','숨은 골목']],tags:['hidden']},
+ {id:'vittoriano',n:'15',name:'비토리아노',en:'Altare della Patria',type:'architecture',label:'근대 기념비 · 흰 대리석',area:'Piazza Venezia',desc:'베네치아 광장 앞에 서 있는 크고 흰 기념비입니다. 고대 유적이 많은 도시에서 근대의 거대한 기념 건축이 어떻게 자리 잡았는지 보여 줍니다.',story:'정면에서 규모를 느낀 뒤 옆 골목으로 물러나 주변 건물과 비교해 보세요. 같은 도시 안에서 시대마다 다른 건축 언어가 어떻게 만나는지 볼 수 있습니다.',facts:[['관찰 포인트','흰 대리석 · 계단'],['추천 시선','정면과 옆 골목에서의 비교'],['탐험 테마','건축과 역사']],tags:['architecture']},
+ {id:'trastevere',n:'16',name:'트라스테베레',en:'Trastevere',type:'hidden',label:'강 건너 동네 · 골목 산책',area:'Piazza di Santa Maria in Trastevere',desc:'테베레 강 건너편의 좁은 골목과 작은 광장이 이어지는 동네입니다. 유명한 건물보다 골목의 분위기와 일상의 속도를 느끼기 좋은 곳입니다.',story:'지도를 잠시 접고 골목의 갈림길에서 발길이 향하는 쪽으로 걸어 보세요. 카페나 식당이 많은 지역이므로 걷는 중간에 쉬어 가기에도 좋습니다. 운영 여부는 현장에서 확인하세요.',facts:[['관찰 포인트','골목 · 작은 광장'],['추천 시선','갈림길마다 방향 바꾸기'],['탐험 테마','숨은 골목']],tags:['hidden','food']}
+];
+const food = [
+ {name:'에스프레소 바 들르기',en:'A quick espresso stop',type:'카페 아이디어',desc:'걷는 중 잠깐 쉬어가기 좋은 동네 바를 찾아보세요.'},
+ {name:'로마식 점심 탐색',en:'Roman lunch nearby',type:'식당 아이디어',desc:'오늘의 파스타나 지역 메뉴를 살펴보는 짧은 휴식.'},
+ {name:'젤라토 브레이크',en:'Gelato break',type:'디저트 아이디어',desc:'다음 장소로 이동하기 전 잠시 쉬어가기.'}
+];
+const communityRoutes = [
+ {id:'r1',title:'고대의 흔적을 따라',subtitle:'Ancient traces',type:'architecture',desc:'판테온에서 피아차 디 피에트라까지, 기둥과 돔을 중심으로 보는 산책.',stops:['pantheon','pietra'],count:'4 stops',time:'건축 중심'},
+ {id:'r2',title:'광장에서 광장으로',subtitle:'Piazza to piazza',type:'slow',desc:'나보나 광장의 열린 공간과 주변 골목을 느긋하게 연결하는 코스.',stops:['navona','ignazio','pantheon'],count:'5 stops',time:'느긋한 산책'},
+ {id:'r3',title:'골목의 일상 관찰',subtitle:'Everyday corners',type:'food',desc:'캄포 데 피오리 주변의 거리 풍경을 보고 카페와 식사 시간을 더하는 코스.',stops:['campo','argentina'],count:'4 stops',time:'카페·식당'},
+ {id:'r4',title:'작은 광장과 파사드',subtitle:'Facades & details',type:'architecture',desc:'눈높이를 바꿔가며 건물의 표정과 광장의 형태를 관찰하는 코스.',stops:['ignazio','pietra','navona'],count:'5 stops',time:'건축 중심'},
+ {id:'r5',title:'느린 오후의 로마',subtitle:'A slow afternoon',type:'slow',desc:'명소 사이에 쉬는 시간을 넣고 도시의 리듬을 즐기는 산책.',stops:['pantheon','navona','campo'],count:'3 stops',time:'느긋한 산책'},
+ {id:'r6',title:'산책과 한 끼',subtitle:'Walk & eat',type:'food',desc:'도심 장소를 둘러본 뒤 주변 식문화와 휴식을 함께 고려한 코스.',stops:['campo','pantheon','argentina'],count:'4 stops',time:'카페·식당'},
+ {id:'r7',title:'제국의 중심을 걷다',subtitle:'Imperial centre',type:'architecture',desc:'콜로세움에서 포로 로마노, 캄피돌리오 광장까지 고대 로마의 중심부를 잇는 산책.',stops:['colosseo','foro','campidoglio'],count:'3 stops',time:'건축 중심'},
+ {id:'r8',title:'분수에서 계단까지',subtitle:'Fountain to steps',type:'slow',desc:'트레비 분수와 스페인 계단, 판테온을 천천히 잇는 느긋한 산책.',stops:['trevi','spagna','pantheon'],count:'3 stops',time:'느긋한 산책'}
+];
+let currentPage='home', selectedPlace='pantheon', route=['pantheon','navona','campo'], theme='all', routeFilter='all', isEnglish=false;
+const $=id=>document.getElementById(id);
+function placeById(id){return places.find(p=>p.id===id)}
+function showToast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('toast').style.display='none',2300)}
+function go(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(page).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page || (page==='detail'&&b.dataset.page==='places')));currentPage=page;window.scrollTo({top:0,behavior:'smooth'});if(page==='routes')renderRoute();if(page==='home'&&mapReady)setTimeout(()=>google.maps.event.trigger(homeMap,'resize'),0)}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.goto)));
+function row(p){return `<div class="place-row" data-place="${p.id}" tabindex="0" role="button"><span class="num">${p.n}</span><div><div class="place-name">${isEnglish?p.en:p.name}</div><div class="place-meta">${isEnglish?p.label:p.label} · ${p.area}</div></div><span class="arrow">↗</span></div>`}
+function renderHome(){const visible=places.filter(p=>theme==='all'||p.tags.includes(theme));$('homePlaces').innerHTML=visible.slice(0,4).map(row).join('');$('homeRoutes').innerHTML=communityRoutes.slice(0,2).map(r=>`<div class="route-card"><div><strong>${r.title}</strong><p>${r.desc}</p></div><button class="outline-btn" onclick="useCommunityRoute('${r.id}')">열기 ↗</button></div>`).join('');$('homeFood').innerHTML=food.map((f,i)=>`<div class="food-row" data-food="${i}" tabindex="0" role="button"><div><b>${f.name}</b><small>${f.desc}</small></div><span>↗</span></div>`).join('');bindPlaceRows();syncHomeMap()}
+function renderCatalog(){const q=$('searchInput').value.trim().toLowerCase(),cat=$('categorySelect').value;const items=places.filter(p=>(cat==='all'||p.tags.includes(cat))&&(!q||(p.name+p.en+p.label+p.area+p.desc).toLowerCase().includes(q)));$('catalog').innerHTML=items.map(row).join('')||'<p>검색 결과가 없습니다.</p>';bindPlaceRows()}
+function bindPlaceRows(){document.querySelectorAll('[data-place]').forEach(el=>{el.onclick=()=>openDetail(el.dataset.place);el.onkeydown=e=>{if(e.key==='Enter')openDetail(el.dataset.place)}})}
+function openDetail(id){selectedPlace=id;const p=placeById(id);$('detailEyebrow').textContent='PLACE FILE / '+p.n;$('detailCategory').textContent=p.label;$('detailTitle').textContent=isEnglish?p.en:p.name;$('detailAlt').textContent=p.area+' · CENTRO STORICO';$('detailDesc').textContent=p.desc;$('detailStory').textContent=p.story;$('detailFacts').innerHTML=p.facts.map(f=>`<div class="fact"><span>${f[0]}</span><b>${f[1]}</b></div>`).join('');$('relatedPlaces').innerHTML=places.filter(x=>x.id!==id&&x.tags.some(t=>p.tags.includes(t))).slice(0,3).map(row).join('');$('addFromDetail').textContent=route.includes(id)?'✓ 내 경로에 추가됨':'+ 내 경로에 추가';$('addFromDetail').onclick=()=>addRoute(id);go('detail');bindPlaceRows()}
+function renderRoute(skipMap){const rd=routeData&&routeData.key===route.join('>')?routeData:null;const stops=$('routeStops');stops.innerHTML=route.length?route.map((id,i)=>{const p=placeById(id);return `<div class="route-stop"><span class="num">${String(i+1).padStart(2,'0')}</span><div><b>${p.name}</b><div class="place-meta">${p.label} · ${p.area}</div>${legHtml(i,rd)}</div><div class="stop-controls"><button aria-label="위로" onclick="moveStop(${i},-1)" ${i===0?'disabled':''}>↑</button><button aria-label="아래로" onclick="moveStop(${i},1)" ${i===route.length-1?'disabled':''}>↓</button><button aria-label="삭제" onclick="removeStop('${id}')">×</button></div></div>`}).join(''):'<p class="sub">아직 장소가 없어요. 아래 목록에서 장소를 추가해 보세요.</p>';$('addPlaceSelect').innerHTML='<option value="">장소 선택해서 추가</option>'+places.filter(p=>!route.includes(p.id)).map(p=>`<option value="${p.id}">${p.name} — ${p.label}</option>`).join('');$('routeSummary').innerHTML=routeSummaryHtml(rd);$('routeFood').innerHTML=food.map((f,i)=>`<div class="food-row" data-food="${i}" tabindex="0" role="button"><div><b>${f.name}</b><small>${f.desc}</small></div><span>↗</span></div>`).join('');if(!skipMap)updateRouteMap()}
+function addRoute(id){if(!route.includes(id)){route.push(id);renderRoute();showToast('내 경로에 장소를 추가했어요.')}else showToast('이미 경로에 포함된 장소예요.')}
+function removeStop(id){route=route.filter(x=>x!==id);renderRoute()}
+function moveStop(i,d){const j=i+d;if(j<0||j>=route.length)return;[route[i],route[j]]=[route[j],route[i]];renderRoute()}
+function useCommunityRoute(id){const r=communityRoutes.find(x=>x.id===id);route=[...r.stops];go('routes');showToast('샘플 경로를 내 경로에 불러왔어요.')}
+$('addPlaceBtn').onclick=()=>{const id=$('addPlaceSelect').value;if(id)addRoute(id);else showToast('추가할 장소를 선택해 주세요.')};
+$('clearRoute').onclick=()=>{route=[];renderRoute();showToast('경로를 초기화했어요.')};
+$('saveRoute').onclick=()=>showToast('프로토타입에서는 경로가 현재 화면에만 유지됩니다.');
+$('shareRoute').onclick=()=>{const text='ROMA / WALK — '+route.map(id=>placeById(id).name).join(' → ');if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>showToast('경로 요약을 복사했어요.')).catch(()=>showToast(text));else showToast(text)};
+$('searchInput').addEventListener('input',renderCatalog);$('categorySelect').addEventListener('change',renderCatalog);
+document.querySelectorAll('#themeChips .chip').forEach(b=>b.onclick=()=>{theme=b.dataset.theme;document.querySelectorAll('#themeChips .chip').forEach(x=>x.classList.toggle('active',x===b));renderHome()});
+document.querySelectorAll('#routeFilters .chip').forEach(b=>b.onclick=()=>{routeFilter=b.dataset.routefilter;document.querySelectorAll('#routeFilters .chip').forEach(x=>x.classList.toggle('active',x===b));renderCommunity()});
+function renderCommunity(){const list=communityRoutes.filter(r=>routeFilter==='all'||r.type===routeFilter);$('communityGrid').innerHTML=list.map(r=>`<article class="community-card"><div><div class="route-number">COMMUNITY ROUTE / ${r.id.toUpperCase()}</div><h3>${r.title}</h3><p>${r.desc}</p></div><footer><span>${r.count} · ${r.time}</span><button class="outline-btn" onclick="useCommunityRoute('${r.id}')">가져오기 ↗</button></footer></article>`).join('')}
+$('langBtn').onclick=()=>{isEnglish=!isEnglish;$('langBtn').textContent=isEnglish?'EN / KR':'KR / EN';showToast(isEnglish?'English mode preview: some editorial copy remains Korean.':'한국어 화면으로 전환했어요.');renderHome();renderCatalog()};
+/* ---------- Google Maps ---------- */
+const KEY_STORE='romaWalkMapsKey';
+let GMAPS_API_KEY='';
+try{GMAPS_API_KEY=localStorage.getItem(KEY_STORE)||''}catch(e){}
+// API 키 설정 창
+function openKeyModal(){
+ $('keyInput').value=GMAPS_API_KEY;
+ $('keyState').textContent=GMAPS_API_KEY?'현재 저장된 키: '+GMAPS_API_KEY.slice(0,6)+'…'+GMAPS_API_KEY.slice(-4):'저장된 키가 없어요.';
+ $('keyModal').style.display='flex';$('keyInput').focus();
+}
+function closeKeyModal(){$('keyModal').style.display='none'}
+$('keyBtn').onclick=openKeyModal;
+$('keyCancel').onclick=closeKeyModal;
+$('keyModal').addEventListener('mousedown',e=>{if(e.target===$('keyModal'))closeKeyModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeKeyModal()});
+$('keyToggle').onclick=()=>{const i=$('keyInput');i.type=i.type==='password'?'text':'password';$('keyToggle').textContent=i.type==='password'?'보기':'숨기기'};
+$('keyForm').onsubmit=e=>{
+ e.preventDefault();
+ const v=$('keyInput').value.trim();
+ if(!v){$('keyError').textContent='API 키를 입력해 주세요.';return}
+ if(!/^AIza[0-9A-Za-z_-]{35}$/.test(v)&&!confirm('일반적인 Google API 키 형식(AIza…)이 아니에요. 그래도 저장할까요?'))return;
+ try{localStorage.setItem(KEY_STORE,v)}catch(err){$('keyError').textContent='이 브라우저에서는 키를 저장할 수 없어요.';return}
+ location.reload();
+};
+$('keyRemove').onclick=()=>{try{localStorage.removeItem(KEY_STORE)}catch(err){}location.reload()};
+const ROME={lat:41.8978,lng:12.4768};
+const COORDS={pantheon:{lat:41.89861,lng:12.47685},navona:{lat:41.89893,lng:12.47307},campo:{lat:41.89558,lng:12.47216},pietra:{lat:41.89968,lng:12.47990},ignazio:{lat:41.89875,lng:12.48038},argentina:{lat:41.89577,lng:12.47683},colosseo:{lat:41.89021,lng:12.49223},foro:{lat:41.89246,lng:12.48531},trevi:{lat:41.90093,lng:12.48331},spagna:{lat:41.90598,lng:12.48282},peter:{lat:41.90217,lng:12.45394},angelo:{lat:41.90306,lng:12.46635},campidoglio:{lat:41.8931,lng:12.48283},bocca:{lat:41.88875,lng:12.48182},vittoriano:{lat:41.89462,lng:12.48316},trastevere:{lat:41.88972,lng:12.46974}};
+const MONO_STYLE=[
+ {elementType:'geometry',stylers:[{color:'#f0f0ed'}]},
+ {elementType:'labels.icon',stylers:[{visibility:'off'}]},
+ {elementType:'labels.text.fill',stylers:[{color:'#777777'}]},
+ {elementType:'labels.text.stroke',stylers:[{color:'#f6f6f3'}]},
+ {featureType:'administrative',elementType:'geometry.stroke',stylers:[{color:'#d8d8d3'}]},
+ {featureType:'poi',stylers:[{visibility:'off'}]},
+ {featureType:'poi.park',elementType:'geometry',stylers:[{visibility:'on'},{color:'#e4e4e0'}]},
+ {featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},
+ {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#d8d8d3'}]},
+ {featureType:'transit',stylers:[{visibility:'off'}]},
+ {featureType:'water',elementType:'geometry',stylers:[{color:'#d4d4d0'}]}
+];
+const DARK_STYLE=[
+ {elementType:'geometry',stylers:[{color:'#1f1f1d'}]},
+ {elementType:'labels.icon',stylers:[{visibility:'off'}]},
+ {elementType:'labels.text.fill',stylers:[{color:'#8a8a85'}]},
+ {elementType:'labels.text.stroke',stylers:[{color:'#121212'}]},
+ {featureType:'administrative',elementType:'geometry.stroke',stylers:[{color:'#34342f'}]},
+ {featureType:'poi',stylers:[{visibility:'off'}]},
+ {featureType:'poi.park',elementType:'geometry',stylers:[{visibility:'on'},{color:'#252523'}]},
+ {featureType:'road',elementType:'geometry',stylers:[{color:'#2c2c29'}]},
+ {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1a1a18'}]},
+ {featureType:'transit',stylers:[{visibility:'off'}]},
+ {featureType:'water',elementType:'geometry',stylers:[{color:'#0e0e0e'}]}
+];
+const isDark=()=>document.documentElement.dataset.theme==='dark';
+let mapReady=false,homeMap,routeMap,infoWin,userMarker,mapSel=null,routeReq=0,routeData=null,routeOverlays=[];
+const homeMarkers={};
+function placeName(id){const p=placeById(id);return isEnglish?p.en:p.name}
+function pinIcon(label,active){
+ const s=active?40:30,dk=isDark(),A=dk?'#f2f2ee':'#171717',B=dk?'#1a1a1a':'#fff';
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}"><circle cx="${s/2}" cy="${s/2}" r="${s/2-2}" fill="${active?B:A}" stroke="${A}" stroke-width="${active?3:2}"/><text x="50%" y="50%" dy=".35em" text-anchor="middle" font-family="Arial,sans-serif" font-size="${active?14:11}" font-weight="700" fill="${active?A:B}">${label}</text></svg>`;
+ return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg),scaledSize:new google.maps.Size(s,s),anchor:new google.maps.Point(s/2,s/2)};
+}
+function mapOptions(){return{center:ROME,zoom:15,styles:isDark()?DARK_STYLE:MONO_STYLE,mapTypeControl:false,streetViewControl:false,fullscreenControl:true,clickableIcons:false}}
+function mapFail(msg){['homeMapMsg','routeMapMsg'].forEach(id=>{const el=$(id);if(el){el.textContent=msg;el.classList.add('err');el.style.display='flex'}})}
+window.gm_authFailure=()=>mapFail('지도 인증에 실패했어요. API 키의 사용 설정과 허용 도메인을 확인하거나, 상단 “MAP KEY”에서 키를 다시 입력해 주세요. (장소 목록과 경로 편집은 계속 사용할 수 있어요.)');
+
+function initMap(){
+ mapReady=true;
+ homeMap=new google.maps.Map($('homeMap'),mapOptions());
+ infoWin=new google.maps.InfoWindow({maxWidth:240});
+ homeMap.addListener('click',()=>infoWin.close());
+ places.forEach(p=>{
+  const m=new google.maps.Marker({position:COORDS[p.id],map:homeMap,title:placeName(p.id),icon:pinIcon(p.n,false),zIndex:1});
+  m.addListener('click',()=>selectMapPlace(p.id,{pan:true,open:true}));
+  homeMarkers[p.id]=m;
+ });
+ $('homeMapMsg').style.display='none';
+ syncHomeMap();
+ google.maps.event.addListenerOnce(homeMap,'idle',syncHomeMap);
+ updateRouteMap();
+}
+
+// 목록 ↔ 지도 선택 동기화
+function syncHomeMap(){
+ document.querySelectorAll('#homePlaces .place-row').forEach(el=>{
+  el.classList.toggle('sel',el.dataset.place===mapSel);
+  el.onmouseenter=()=>selectMapPlace(el.dataset.place,{pan:true});
+ });
+ if(!mapReady)return;
+ const vis=places.filter(p=>theme==='all'||p.tags.includes(theme));
+ const b=new google.maps.LatLngBounds();
+ places.forEach(p=>{const m=homeMarkers[p.id],on=vis.includes(p);m.setMap(on?homeMap:null);m.setTitle(placeName(p.id));if(on)b.extend(COORDS[p.id])});
+ if(mapSel&&!vis.some(p=>p.id===mapSel)){mapSel=null;infoWin.close()}
+ if(!vis.length)return;
+ if(vis.length===1){homeMap.setCenter(COORDS[vis[0].id]);homeMap.setZoom(16)}else homeMap.fitBounds(b,50);
+}
+function selectMapPlace(id,opt={}){
+ if(!mapReady||!homeMarkers[id])return;
+ if(mapSel&&homeMarkers[mapSel]){homeMarkers[mapSel].setIcon(pinIcon(placeById(mapSel).n,false));homeMarkers[mapSel].setZIndex(1)}
+ mapSel=id;
+ homeMarkers[id].setIcon(pinIcon(placeById(id).n,true));homeMarkers[id].setZIndex(10);
+ document.querySelectorAll('#homePlaces .place-row').forEach(el=>el.classList.toggle('sel',el.dataset.place===id));
+ if(opt.pan)homeMap.panTo(COORDS[id]);
+ if(opt.open)openInfo(id);else infoWin.close();
+}
+function openInfo(id){
+ const p=placeById(id),box=document.createElement('div');
+ box.className='iw';
+ box.innerHTML=`<div class="iw-n">${p.n} / ${p.area}</div><b>${placeName(id)}</b><p>${p.label}</p>`;
+ const detail=document.createElement('button');detail.className='solid-btn';detail.textContent='상세 보기 ↗';detail.onclick=()=>openDetail(id);
+ const add=document.createElement('button');add.className='outline-btn';add.textContent='+ 경로';add.onclick=()=>addRoute(id);
+ const row=document.createElement('div');row.className='iw-actions';row.append(detail,add);box.append(row);
+ infoWin.setContent(box);infoWin.open({map:homeMap,anchor:homeMarkers[id]});
+}
+function fitHome(){if(!mapReady)return;mapSel=null;infoWin.close();places.forEach(p=>homeMarkers[p.id].setIcon(pinIcon(p.n,false)));document.querySelectorAll('#homePlaces .place-row').forEach(el=>el.classList.remove('sel'));syncHomeMap()}
+function locateMe(){
+ if(!mapReady){showToast('지도가 아직 준비되지 않았어요.');return}
+ if(!navigator.geolocation){showToast('이 브라우저에서는 위치 기능을 사용할 수 없어요.');return}
+ navigator.geolocation.getCurrentPosition(pos=>{
+  const ll={lat:pos.coords.latitude,lng:pos.coords.longitude};
+  if(userMarker)userMarker.setPosition(ll);
+  else userMarker=new google.maps.Marker({position:ll,map:homeMap,title:'현재 위치',zIndex:999,icon:{path:google.maps.SymbolPath.CIRCLE,scale:7,fillColor:isDark()?'#f2f2ee':'#171717',fillOpacity:1,strokeColor:isDark()?'#1a1a1a':'#fff',strokeWeight:3}});
+  homeMap.panTo(ll);homeMap.setZoom(16);
+ },()=>showToast('위치 권한 없이도 지도를 둘러볼 수 있어요.'),{timeout:8000});
+}
+$('locateBtn').onclick=locateMe;$('fitBtn').onclick=fitHome;
+
+function applyMapTheme(){
+ if(!mapReady)return;
+ const st=isDark()?DARK_STYLE:MONO_STYLE;
+ homeMap.setOptions({styles:st});if(routeMap)routeMap.setOptions({styles:st});
+ places.forEach(p=>homeMarkers[p.id].setIcon(pinIcon(p.n,p.id===mapSel)));
+ updateRouteMap();
+}
+// 나의 경로: 도보 경로 계산 및 표시
+function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+' km':Math.round(m)+' m'}
+function fmtTime(s){const m=Math.max(1,Math.round(s/60));return m>=60?Math.floor(m/60)+'시간 '+(m%60)+'분':m+'분'}
+function legHtml(i,rd){const l=rd&&rd.legs&&rd.legs[i];return l?`<div class="leg">↓ 다음 장소까지 도보 ${fmtTime(l.s)} · ${fmtDist(l.m)}</div>`:''}
+function routeSummaryHtml(rd){
+ const f=(a,b)=>`<div class="fact"><span>${a}</span><b>${b}</b></div>`;
+ let facts=f('선택한 장소',route.length+'곳')+f('코스 유형','나만의 산책'),note;
+ if(!mapReady)note='지도를 불러오면 도보 경로와 예상 시간이 표시돼요.';
+ else if(route.length<2)note='장소를 두 곳 이상 담으면 도보 경로를 계산해요.';
+ else if(!rd)note='도보 경로를 계산하는 중이에요…';
+ else if(rd.error)note='도보 경로를 계산하지 못했어요. 지도의 점선은 방문 순서만 보여 주는 직선 연결이며 실제 경로나 거리가 아니에요.';
+ else{facts+=f('도보 거리',fmtDist(rd.m))+f('예상 시간',fmtTime(rd.s));note='Google 지도 도보 경로 기준의 추정치예요. 관람·휴식 시간은 포함되지 않아요.'}
+ return `<div class="fact-grid">${facts}</div><p>${note}</p>`;
+}
+function updateRouteMap(){
+ const el=$('routeMap');
+ if(!mapReady||!el||!el.offsetWidth)return;
+ if(!routeMap){routeMap=new google.maps.Map(el,mapOptions());$('routeMapMsg').style.display='none'}
+ else google.maps.event.trigger(routeMap,'resize');
+ routeOverlays.forEach(o=>o.setMap(null));routeOverlays=[];
+ const req=++routeReq;
+ if(!route.length){routeData=null;routeMap.setCenter(ROME);routeMap.setZoom(15);return}
+ const b=new google.maps.LatLngBounds();
+ route.forEach((id,i)=>{
+  routeOverlays.push(new google.maps.Marker({position:COORDS[id],map:routeMap,title:placeName(id),icon:pinIcon(String(i+1),false),zIndex:10+i}));
+  b.extend(COORDS[id]);
+ });
+ if(route.length<2){routeData=null;routeMap.setCenter(COORDS[route[0]]);routeMap.setZoom(16);return}
+ routeMap.fitBounds(b,60);
+ const key=route.join('>');
+ routeData=null;
+ new google.maps.DirectionsService().route({
+  origin:COORDS[route[0]],destination:COORDS[route[route.length-1]],
+  waypoints:route.slice(1,-1).map(id=>({location:COORDS[id],stopover:true})),
+  travelMode:google.maps.TravelMode.WALKING,optimizeWaypoints:false
+ }).then(res=>{
+  if(req!==routeReq)return;
+  const r=res.routes[0],path=r.overview_path;
+  routeOverlays.push(
+   new google.maps.Polyline({path,map:routeMap,strokeColor:isDark()?'#f2f2ee':'#171717',strokeWeight:7,zIndex:1}),
+   new google.maps.Polyline({path,map:routeMap,strokeColor:isDark()?'#1a1a1a':'#ffffff',strokeWeight:3,zIndex:2})
+  );
+  routeMap.fitBounds(r.bounds,60);
+  const legs=r.legs.map(l=>({m:l.distance.value,s:l.duration.value}));
+  routeData={key,legs,m:legs.reduce((a,l)=>a+l.m,0),s:legs.reduce((a,l)=>a+l.s,0)};
+  renderRoute(true);
+ }).catch(()=>{
+  if(req!==routeReq)return;
+  routeOverlays.push(new google.maps.Polyline({path:route.map(id=>COORDS[id]),map:routeMap,strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#777777',scale:3},offset:'0',repeat:'14px'}]}));
+  routeData={key,error:true};
+  renderRoute(true);
+ });
+}
+(function(){if(!GMAPS_API_KEY){mapFail('지도를 보려면 Google Maps API 키가 필요해요. 상단의 “MAP KEY” 버튼에서 키를 입력해 주세요. (장소 목록과 경로 편집은 계속 사용할 수 있어요.)');return}const s=document.createElement('script');s.src='https://maps.googleapis.com/maps/api/js?key='+GMAPS_API_KEY+'&callback=initMap&language='+(function(){try{return localStorage.getItem('romaWalkLang')==='en'?'en':'ko'}catch(e){return 'ko'}})();s.async=true;s.onerror=()=>mapFail('지도를 불러오지 못했어요. 네트워크 연결을 확인해 주세요. (장소 목록과 경로 편집은 계속 사용할 수 있어요.)');document.head.appendChild(s)})();
+
+
+/* ---------- 걷는 길 위의 쉼표: 카테고리 페이지 ---------- */
+const FOOD_META=[{ko:'에스프레소 바',en:'espresso bar',q:'caffè espresso bar'},{ko:'로마식 식당',en:'Roman restaurant',q:'trattoria ristorante'},{ko:'젤라또 가게',en:'gelato shop',q:'gelateria'}];
+let foodIdx=0;
+function openFood(i){
+ foodIdx=i;
+ const f=food[i],m=FOOD_META[i],ids=route.length?route:places.map(p=>p.id);
+ $('foodEyebrow').textContent='REST STOP / '+String(i+1).padStart(2,'0');
+ $('foodTitle').textContent=f.name;
+ $('foodDesc').textContent=f.desc;
+ $('foodTabs').innerHTML=food.map((x,k)=>`<button class="chip${k===i?' active':''}" data-food="${k}">${x.name}</button>`).join('');
+ $('foodSrc').textContent=route.length?'내 경로의 장소 기준':'전체 장소 기준';
+ $('foodList').innerHTML=ids.map((id,k)=>{
+  const url='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(m.q+' near '+placeById(id).en+', Rome');
+  const title=isEnglish?placeName(id)+' — '+m.en:placeName(id)+' 근처 '+m.ko;
+  return `<a class="place-row" href="${url}" target="_blank" rel="noopener"><span class="num">${String(k+1).padStart(2,'0')}</span><div><div class="place-name">${title}</div><div class="place-meta">Google 지도에서 검색 ↗</div></div><span class="arrow">↗</span></a>`;
+ }).join('');
+ go('food');
+}
+document.addEventListener('click',e=>{const el=e.target.closest('[data-food]');if(el)openFood(+el.dataset.food)});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){const el=e.target.closest&&e.target.closest('[data-food]');if(el)openFood(+el.dataset.food)}});
+
+/* ---------- 다크 모드 전환 ---------- */
+function refreshThemeBtn(){
+ const d=isDark(),b=$('themeBtn');
+ b.textContent=d?'☀':'☾';
+ const label=isEnglish?(d?'Switch to light mode':'Switch to dark mode'):(d?'라이트 모드로 전환':'다크 모드로 전환');
+ b.setAttribute('aria-label',label);b.title=label;
+}
+function setTheme(t,persist){
+ document.documentElement.dataset.theme=t;
+ if(persist){try{localStorage.setItem('romaWalkTheme',t)}catch(e){}}
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#121212':'#171717';
+ refreshThemeBtn();applyMapTheme();
+}
+$('themeBtn').onclick=()=>setTheme(isDark()?'light':'dark',true);
+if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{let s=null;try{s=localStorage.getItem('romaWalkTheme')}catch(_){}if(!s)setTheme(e.matches?'dark':'light',false)});
+setTheme(document.documentElement.dataset.theme,false);
+
+renderHome();renderCatalog();renderRoute();renderCommunity();
+</script>
+<script>
+/* ROMA / WALK — 한/영 번역
+ * 화면의 한국어 문구를 사전(D)으로 영어로 바꾸고, 다시 한국어로 되돌린다.
+ * 동적으로 그려지는 목록·토스트·지도 말풍선도 MutationObserver로 함께 번역한다. */
+(function(){
+'use strict';
+const TITLE={ko:'ROMA / WALK — 로마 건축 탐험',en:'ROMA / WALK — Rome Architecture Walks'};
+const LANG_KEY='romaWalkLang';
+
+const D={
+ // 내비게이션·공통
+ '탐색':'Explore','명소 아카이브':'Places','나의 경로':'My Route','추천 경로':'Routes','주요 메뉴':'Main menu',
+ '전체 보기':'Show all','전체 보기 →':'View all →','모두 보기 →':'See all →','전체':'All',
+ '지도를 불러오는 중…':'Loading map…','로마 지도':'Rome map','도보 경로 지도':'Walking route map',
+ '⌖ 현재 위치':'⌖ My location','현재 위치':'My location',
+ // 홈
+ '유명한 장소를 체크하는 여행에서, 도시의 이야기를 발견하는 산책으로. 건축과 골목, 그리고 그 사이의 장소들을 나만의 경로로 연결해 보세요.':'From ticking off famous sights to a walk that uncovers the city’s stories. Connect architecture, alleys and the places in between into a route of your own.',
+ '오늘 어떤 로마를 걷고 싶나요?':'Which Rome do you want to walk today?',
+ '관심 테마를 선택하면 관련 장소를 모아볼 수 있어요.':'Pick a theme to see related places.',
+ '건축과 역사':'Architecture & History','숨은 골목':'Hidden Alleys','예술과 광장':'Art & Piazzas','카페와 식문화':'Cafés & Food Culture',
+ '도심의 발견':'Discoveries in the Centre',
+ '판테온 · 나보나 광장 · 캄포 데 피오리 주변':'Around the Pantheon · Piazza Navona · Campo de’ Fiori',
+ '이 장소들로 경로 만들기 ↗':'Build a route from these ↗',
+ '사람들이 만든 산책':'Walks made by people','다른 여행자의 시선으로 도시를 만나보세요.':'See the city through other travellers’ eyes.',
+ '걷는 길 위의 쉼표':'A pause along the way','경로 근처에서 들르기 좋은 카페와 식당 아이디어':'Café and restaurant ideas near your route',
+ '※ 장소와 소개 문구는 서비스 콘셉트를 보여주기 위한 예시입니다. 영업 여부, 실제 거리, 혼잡도 및 추천 순위는 검증된 실시간 데이터가 아닙니다.':'※ Places and descriptions are examples to illustrate the concept. Opening status, actual distances, crowding and rankings are not verified real-time data.',
+ '열기 ↗':'Open ↗','가져오기 ↗':'Import ↗',
+ // 명소 아카이브
+ '로마의 건축물과 광장, 골목을 기록한 장소 아카이브':'An archive of Rome’s buildings, piazzas and alleys',
+ '장소명 또는 키워드 검색 / Search places':'Search places or keywords','모든 테마':'All themes','검색 결과가 없습니다.':'No results found.',
+ '소개는 탐험 경험을 위한 편집 콘텐츠 예시입니다. 방문 전 공식 자료를 통해 입장 가능 여부와 운영 정보를 확인하세요.':'Descriptions are sample editorial content. Check official sources for admission and opening information before you visit.',
+ // 상세
+ '← 장소 목록으로':'← Back to places','장소 사진이 들어갈 영역':'Place photo goes here','실제 사진 또는 이미지 API 연결 예정':'Real photo or image API to be connected',
+ '+ 내 경로에 추가':'+ Add to my route','✓ 내 경로에 추가됨':'✓ Added to my route','경로 확인 →':'View route →',
+ '함께 둘러볼 만한 곳':'Worth seeing nearby','지도 연동 시 실제 경로 주변 반경을 기준으로 표시할 영역':'Will show places within a radius of the actual route once the map is linked',
+ '관찰 포인트':'Look for','추천 시선':'Suggested view','탐험 테마':'Theme',
+ // 나의 경로
+ '장소를 담고 순서를 바꿔 나만의 산책 코스를 만들어 보세요.':'Add places and reorder them to build your own walking course.',
+ '나의 산책 순서':'My walking order','장소를 추가한 뒤 위아래 버튼으로 순서를 조정할 수 있어요.':'Add places, then use the up/down buttons to reorder.',
+ '초기화':'Reset','장소 선택해서 추가':'Choose a place to add','+ 장소 추가':'+ Add place','경로 저장하기':'Save route','경로 공유':'Share route',
+ '산책에 필요한 작은 정보':'Small details for your walk','코스를 만든 뒤, 이동 흐름에 맞는 카페와 식당을 함께 살펴보세요.':'After building your course, look for cafés and restaurants that fit your flow.',
+ '추천은 예시 데이터이며, 경로와의 실제 거리·영업 상태는 확인되지 않았습니다.':'Suggestions are sample data; actual distance from the route and opening status are unverified.',
+ '아직 장소가 없어요. 아래 목록에서 장소를 추가해 보세요.':'No places yet. Add some from the list below.',
+ '위로':'Move up','아래로':'Move down','삭제':'Remove',
+ '선택한 장소':'Places selected','코스 유형':'Course type','나만의 산책':'My own walk','도보 거리':'Walking distance','예상 시간':'Estimated time',
+ '지도를 불러오면 도보 경로와 예상 시간이 표시돼요.':'Once the map loads, the walking route and estimated time will appear.',
+ '장소를 두 곳 이상 담으면 도보 경로를 계산해요.':'Add two or more places to calculate a walking route.',
+ '도보 경로를 계산하는 중이에요…':'Calculating the walking route…',
+ '도보 경로를 계산하지 못했어요. 지도의 점선은 방문 순서만 보여 주는 직선 연결이며 실제 경로나 거리가 아니에요.':'Couldn’t calculate the walking route. The dotted line on the map is a straight connection showing visit order only — not a real route or distance.',
+ 'Google 지도 도보 경로 기준의 추정치예요. 관람·휴식 시간은 포함되지 않아요.':'Estimate based on Google Maps walking routes. Sightseeing and rest time are not included.',
+ // 추천 경로
+ '관심사와 걷는 속도에 맞는 다른 사람들의 경로를 발견하고, 내 경로의 출발점으로 가져오세요.':'Discover routes by others that match your interests and pace, and bring one in as a starting point.',
+ '건축':'Architecture','느긋한 산책':'Slow walks','카페·식당':'Cafés & restaurants','건축 중심':'Architecture-focused','느긋한 산책 ':'Slow walk',
+ '이 화면의 경로는 서비스 시나리오를 위한 샘플입니다. 실제 이용자 작성 경로, 후기, 인기 순위가 아닙니다.':'Routes on this screen are samples for the service scenario, not real user routes, reviews or rankings.',
+ '고대의 흔적을 따라':'Following Ancient Traces','판테온에서 피아차 디 피에트라까지, 기둥과 돔을 중심으로 보는 산책.':'From the Pantheon to Piazza di Pietra — a walk centred on columns and domes.',
+ '광장에서 광장으로':'From Piazza to Piazza','나보나 광장의 열린 공간과 주변 골목을 느긋하게 연결하는 코스.':'A relaxed course linking Piazza Navona’s open space with the surrounding alleys.',
+ '골목의 일상 관찰':'Watching Everyday Corners','캄포 데 피오리 주변의 거리 풍경을 보고 카페와 식사 시간을 더하는 코스.':'A course that takes in the streets around Campo de’ Fiori and adds time for coffee and a meal.',
+ '작은 광장과 파사드':'Small Piazzas & Façades','눈높이를 바꿔가며 건물의 표정과 광장의 형태를 관찰하는 코스.':'A course for observing the character of buildings and the form of piazzas from changing viewpoints.',
+ '느린 오후의 로마':'A Slow Afternoon in Rome','명소 사이에 쉬는 시간을 넣고 도시의 리듬을 즐기는 산책.':'A walk that puts rests between the sights and lets you enjoy the city’s rhythm.',
+ '산책과 한 끼':'A Walk and a Meal','도심 장소를 둘러본 뒤 주변 식문화와 휴식을 함께 고려한 코스.':'A course that, after visiting central sights, also takes the surrounding food culture and rest into account.',
+ // 카페·식당 아이디어
+ '에스프레소 바 들르기':'Stop at an espresso bar','걷는 중 잠깐 쉬어가기 좋은 동네 바를 찾아보세요.':'Look for a neighbourhood bar that’s good for a short break mid-walk.',
+ '로마식 점심 탐색':'Find a Roman lunch','오늘의 파스타나 지역 메뉴를 살펴보는 짧은 휴식.':'A short break to look at today’s pasta or local menu.',
+ '젤라토 브레이크':'Gelato break','다음 장소로 이동하기 전 잠시 쉬어가기.':'A pause before heading to the next place.',
+ // 장소 이름
+ '판테온':'Pantheon','나보나 광장':'Piazza Navona','캄포 데 피오리':'Campo de’ Fiori','피아차 디 피에트라':'Piazza di Pietra','산티냐치오 광장':'Piazza di Sant’Ignazio','라르고 디 토레 아르젠티나':'Largo di Torre Argentina',
+ // 장소 라벨
+ '고대 건축':'Ancient architecture','돔 구조':'Dome structure','바로크':'Baroque','도시의 무대':'The city’s stage','시장 광장':'Market square','일상 풍경':'Everyday scenes',
+ '고대 유구':'Ancient remains','현대 도시':'Modern city','도시 공간':'Urban space','건축적 리듬':'Architectural rhythm','고고학 유적':'Archaeological site','도시의 층위':'Layers of the city',
+ // 장소 설명
+ '거대한 돔과 중앙의 오큘루스로 잘 알려진 로마의 대표적인 고대 건축물입니다. 내부 공간은 장식보다 비례와 빛의 움직임을 먼저 경험하게 합니다.':'One of Rome’s best-known ancient buildings, famed for its huge dome and the central oculus. Inside, you experience proportion and the movement of light before ornament.',
+ '광장에 도착하면 건물 정면만 보고 지나가기보다, 포르티코의 기둥과 둥근 돔이 만드는 대비를 천천히 살펴보세요. 날씨와 시간에 따라 빛이 내부에 들어오는 방식도 달라집니다.':'When you reach the square, don’t just glance at the façade — take your time with the contrast between the portico’s columns and the round dome. The way light enters the interior also changes with the weather and time of day.',
+ '돔':'Dome','오큘루스':'Oculus','정면과 내부 공간':'Façade and interior',
+ '길게 뻗은 광장 형태와 분수, 주변 건축의 조합이 인상적인 장소입니다. 광장은 이동 통로이면서 사람들이 머물고 바라보는 도시의 무대이기도 합니다.':'A place made memorable by its elongated shape, its fountains and the architecture around it. The piazza is a passage, but also a stage where people linger and watch.',
+ '분수 주변에서 시선을 조금씩 옮겨 보세요. 광장의 길이와 열린 공간, 주변 파사드가 함께 읽힐 때 이곳이 단순한 명소가 아니라 도시의 방이라는 점이 드러납니다.':'Shift your gaze slowly around the fountains. When the length of the piazza, its open space and the surrounding façades are read together, it reveals itself as not just a sight but a room of the city.',
+ '분수':'Fountains','파사드':'Façades','광장 전체의 형태':'The shape of the whole piazza',
+ '역사적 중심지 안에서 일상의 움직임을 관찰하기 좋은 광장입니다. 주변 골목과 상점, 광장에 모이는 사람들의 활동이 장소의 분위기를 만듭니다.':'A piazza in the historic centre that is good for watching everyday movement. The surrounding alleys and shops and the people who gather make its atmosphere.',
+ '기념물을 보는 것만큼 주변의 작은 가게와 골목의 연결을 살펴보세요. 방문 시간에 따라 풍경이 달라질 수 있으므로, 현장에서 실제 운영 여부를 확인하는 편이 좋습니다.':'Look at how the small shops and alleys connect, as much as at the monuments. The scene changes with the time of your visit, so it’s best to check on site whether things are actually open.',
+ '골목':'Alleys','상점':'Shops','광장':'Piazza','일상의 흐름':'The flow of daily life',
+ '고대 건축의 흔적이 오늘날의 도시 조직 안에 남아 있는 모습을 살펴볼 수 있는 광장입니다. 오래된 구조와 현재의 거리 풍경이 한 프레임에 겹쳐집니다.':'A piazza where you can see traces of ancient architecture surviving inside today’s urban fabric. Old structures and the present streetscape overlap in a single frame.',
+ '기둥의 반복과 주변 건물의 높이를 비교해 보세요. 과거의 건축이 독립된 유물이 아니라 현재의 거리와 함께 살아가는 모습을 관찰할 수 있습니다.':'Compare the repetition of the columns with the height of the surrounding buildings. You can see old architecture not as an isolated relic but living alongside today’s street.',
+ '기둥의 반복':'Repeating columns','고대와 현재의 대비':'Contrast of ancient and present',
+ '광장을 둘러싼 건물의 곡선적인 외관과 공간 구성이 독특한 인상을 주는 장소입니다. 작은 광장이 어떻게 시선을 모으고 머무름을 만드는지 관찰해 보세요.':'A place with a distinctive impression, given by the curved façades enclosing the piazza and its spatial composition. Watch how a small square gathers the eye and invites you to stay.',
+ '광장 가장자리에 서서 건물의 곡선과 창문 리듬을 바라보면, 공간이 시선을 중심으로 모으는 방식을 읽을 수 있습니다.':'Stand at the edge of the piazza and look at the curve of the buildings and the rhythm of the windows; you can read how the space draws your gaze to the centre.',
+ '곡선형 파사드':'Curved façades','광장 가장자리에서 중앙으로':'From the edge of the piazza to its centre',
+ '도시 한복판에서 고고학적 유적과 현대의 교통·거리 풍경이 만나는 장소입니다. 로마의 시간이 여러 겹으로 쌓여 있다는 사실을 떠올리게 합니다.':'A place in the middle of the city where archaeological remains meet modern traffic and streetscape. It reminds you that Rome’s time is stacked in many layers.',
+ '유적을 둘러싼 도로와 주변 건물을 함께 관찰해 보세요. 도시가 과거를 보존하는 방식과 현재의 일상이 공존하는 모습을 생각해 볼 수 있습니다.':'Observe the roads and buildings around the ruins together. Think about how the city preserves its past while everyday life coexists with it.',
+ '유적과 도로':'Ruins and roads','거리 위에서 내려다보기':'Looking down from street level',
+ // 추가 명소
+ '콜로세움':'Colosseum',
+ '로마 제국 시대의 대표적인 원형 경기장으로, 오늘날에도 도시 한가운데서 거대한 규모를 드러냅니다. 아치가 반복되는 외벽은 구조와 리듬을 한눈에 보여 줍니다.':'A signature amphitheatre of the Roman Empire that still shows its enormous scale in the middle of the city. The repeating arches of its outer wall show structure and rhythm at a glance.',
+ '가까이 다가가기 전에 멀리서 전체 윤곽을 먼저 바라보세요. 아치의 반복과 층마다 달라지는 표정을 비교하면 이 건물이 어떻게 사람들을 모으고 흐르게 했는지 상상할 수 있습니다.':'Before getting close, take in the whole outline from a distance. Compare the repetition of arches and how each tier changes its expression, and imagine how the building gathered and moved crowds.',
+ '멀리서 본 전체 윤곽':'The full outline from afar',
+ '포로 로마노':'Roman Forum',
+ '고대 로마의 공공 생활이 이루어지던 중심지의 유적입니다. 무너진 기둥과 기단 사이를 걸으며 도시가 어떻게 쌓여 왔는지 읽을 수 있습니다.':'The ruins of the centre of public life in ancient Rome. Walking among fallen columns and foundations, you can read how the city accumulated over time.',
+ '유적을 하나씩 확인하기보다 높은 곳에서 전체 배치를 먼저 바라보세요. 흩어진 기둥과 길의 방향이 하나의 도시 공간으로 이어지는 모습을 상상해 볼 수 있습니다.':'Rather than checking off ruins one by one, first look at the overall layout from a high point. Imagine how scattered columns and the direction of the paths join into one urban space.',
+ '높은 곳에서 본 전체 배치':'The whole layout from a high point',
+ '트레비 분수':'Trevi Fountain',
+ '좁은 골목을 지나 갑자기 열리는 광장 한쪽을 가득 채우는 분수입니다. 조각과 건물 외벽이 하나의 무대처럼 연결되어 있습니다.':'A fountain that suddenly fills one side of a piazza opening out from narrow alleys. Sculpture and the building façade join like a single stage set.',
+ '광장에 들어서는 순간의 대비를 기억해 두세요. 좁은 길에서 열린 공간으로 나오는 경험 자체가 이 장소의 연출의 일부입니다. 사람이 많을 수 있으니 이른 시간이나 늦은 시간을 고려해 보세요.':'Remember the contrast the moment you step into the piazza. Coming from a narrow lane into open space is part of the staging of this place. It can be crowded, so consider an early or late hour.',
+ '골목에서 광장으로 들어서는 순간':'The moment you enter the piazza from the alley',
+ '스페인 계단':'Spanish Steps',
+ '언덕 위 성당과 아래 광장을 이어 주는 넓은 계단입니다. 계단은 이동 통로이면서 사람들이 앉아 도시를 바라보는 자리이기도 합니다.':'A broad staircase linking the church on the hill with the piazza below. It is a passage, but also a place where people sit and watch the city.',
+ '아래에서 위로, 다시 위에서 아래로 오르내리며 시야가 어떻게 달라지는지 비교해 보세요. 계단의 곡선과 단의 리듬이 만드는 흐름을 따라가면 도시의 높낮이가 보입니다.':'Go up and down and compare how your view changes. Follow the flow made by the curves of the staircase and the rhythm of its steps, and you will see the city’s changes in level.',
+ '아래와 위, 두 가지 시점':'Two viewpoints, below and above',
+ '성 베드로 대성당':'St. Peter’s Basilica',
+ '바티칸에 자리한 거대한 대성당과 그 앞의 타원형 광장입니다. 광장의 열주가 두 팔처럼 방문객을 감싸며 성당으로 시선을 이끕니다.':'A huge basilica in Vatican City with an oval piazza before it. The colonnades of the piazza embrace visitors like two arms and lead the eye to the basilica.',
+ '광장 한가운데에서 열주의 곡선과 성당 정면, 돔을 차례로 바라보세요. 건물이 아니라 광장 전체가 하나의 건축이라는 점이 느껴집니다. 입장 규칙과 복장 기준은 방문 전에 공식 정보로 확인하세요.':'From the middle of the piazza, look in turn at the curve of the colonnades, the basilica façade and the dome. You feel that the whole piazza, not just the building, is one piece of architecture. Check entry rules and dress requirements in official sources before visiting.',
+ '광장 중앙에서 정면으로':'From the centre of the piazza toward the façade',
+ '산탄젤로 성':'Castel Sant’Angelo',
+ '테베레 강변에 서 있는 원통형 요새로, 다리와 함께 도시의 강변 풍경을 만듭니다.':'A cylindrical fortress on the bank of the Tiber that forms the riverside scene of the city together with its bridge.',
+ '다리 위에서 성을 바라보면 강과 둑, 건물의 높이가 한 화면에 겹칩니다. 이동 중에 잠시 멈춰 도시가 강을 어떻게 대하는지 살펴보세요.':'Looking at the castle from the bridge, the river, the embankment and building heights overlap in one view. Pause on your way and see how the city faces its river.',
+ '다리 위에서 바라본 성':'The castle seen from the bridge',
+ '캄피돌리오 광장':'Piazza del Campidoglio',
+ '언덕 위에서 건물들이 광장을 둘러싸며 질서 있는 공간을 만듭니다. 바닥의 무늬와 건물의 배치가 함께 읽히는 계획된 광장입니다.':'On top of the hill, buildings enclose the piazza and create an orderly space. It is a planned piazza where the paving pattern and the arrangement of buildings are read together.',
+ '계단을 올라 광장에 들어서면 바닥의 패턴을 먼저 내려다보세요. 좌우대칭에 가까운 구성이 시선을 중심으로 모으는 방식을 확인할 수 있습니다.':'After climbing the stairs into the piazza, look first at the pattern on the ground. You can see how a near-symmetrical composition gathers the eye to the centre.',
+ '계단 위에서 광장 중앙으로':'From the top of the stairs to the centre of the piazza',
+ '진실의 입':'Bocca della Verità',
+ '성당 회랑 한쪽에 놓인 둥근 대리석 조각으로 알려진 작은 명소입니다. 규모는 작지만 사람들이 줄을 서서 기다리는 풍경이 장소의 일부가 됩니다.':'A small sight known for a round marble carving set in one side of a church portico. It is small, but the scene of people queuing is part of the place.',
+ '조각 자체보다 주변 광장과 성당의 종탑, 오가는 사람들의 흐름을 함께 관찰해 보세요. 방문 시간에 따라 대기 시간이 달라질 수 있습니다.':'Observe not only the carving but the surrounding piazza, the church bell tower and the flow of people. Waiting times can vary with the time of your visit.',
+ '조각 주변의 사람들':'The people around the carving',
+ '비토리아노':'Altare della Patria',
+ '베네치아 광장 앞에 서 있는 크고 흰 기념비입니다. 고대 유적이 많은 도시에서 근대의 거대한 기념 건축이 어떻게 자리 잡았는지 보여 줍니다.':'A large white monument standing in front of Piazza Venezia. It shows how a vast modern commemorative building took its place in a city full of ancient remains.',
+ '정면에서 규모를 느낀 뒤 옆 골목으로 물러나 주변 건물과 비교해 보세요. 같은 도시 안에서 시대마다 다른 건축 언어가 어떻게 만나는지 볼 수 있습니다.':'After feeling its scale from the front, step back into a side street and compare it with the buildings around. You can see how architectural languages of different eras meet in one city.',
+ '정면과 옆 골목에서의 비교':'Comparing the front and a side street',
+ '트라스테베레':'Trastevere',
+ '테베레 강 건너편의 좁은 골목과 작은 광장이 이어지는 동네입니다. 유명한 건물보다 골목의 분위기와 일상의 속도를 느끼기 좋은 곳입니다.':'A neighbourhood across the Tiber where narrow alleys and small piazzas connect. It is good for feeling the mood of the lanes and the pace of daily life more than famous buildings.',
+ '지도를 잠시 접고 골목의 갈림길에서 발길이 향하는 쪽으로 걸어 보세요. 카페나 식당이 많은 지역이므로 걷는 중간에 쉬어 가기에도 좋습니다. 운영 여부는 현장에서 확인하세요.':'Fold the map away for a moment and walk the way your feet lead at each fork in the alleys. The area has many cafés and restaurants, so it is also good for a rest along the way. Check on site whether places are open.',
+ '갈림길마다 방향 바꾸기':'Changing direction at every fork',
+ '제국의 중심을 걷다':'Walking the Heart of the Empire',
+ '콜로세움에서 포로 로마노, 캄피돌리오 광장까지 고대 로마의 중심부를 잇는 산책.':'A walk linking the core of ancient Rome from the Colosseum through the Roman Forum to Piazza del Campidoglio.',
+ '분수에서 계단까지':'From Fountain to Steps',
+ '트레비 분수와 스페인 계단, 판테온을 천천히 잇는 느긋한 산책.':'A relaxed walk slowly linking the Trevi Fountain, the Spanish Steps and the Pantheon.',
+ '원형 경기장':'Amphitheatre',
+ '고대 유적':'Ancient ruins',
+ '도시의 중심':'Heart of the city',
+ '계단':'Staircase',
+ '도시의 동선':'Urban circulation',
+ '대성당':'Basilica',
+ '열린 광장':'Open piazza',
+ '요새':'Fortress',
+ '강변 풍경':'Riverside scene',
+ '계획된 공간':'Planned space',
+ '성당 회랑':'Church portico',
+ '작은 명소':'Small sight',
+ '근대 기념비':'Modern monument',
+ '흰 대리석':'White marble',
+ '강 건너 동네':'Neighbourhood across the river',
+ '골목 산책':'Alley walk',
+ '아치':'Arches',
+ '외벽의 층':'Tiers of the outer wall',
+ '기둥':'Columns',
+ '기단':'Foundations',
+ '조각':'Sculpture',
+ '수면':'Water surface',
+ '계단의 곡선':'Curve of the staircase',
+ '단의 리듬':'Rhythm of the steps',
+ '열주':'Colonnades',
+ '원통형 구조':'Cylindrical form',
+ '다리':'Bridge',
+ '바닥 무늬':'Paving pattern',
+ '건물 배치':'Arrangement of buildings',
+ '회랑':'Portico',
+ '종탑':'Bell tower',
+ '작은 광장':'Small piazzas',
+ // 쉼표(카페·식당) 페이지
+ '← 탐색으로':'← Back to Explore','경로 주변에서 찾아보기':'Search along your route','내 경로의 장소 기준':'Based on the places in your route','전체 장소 기준':'Based on all places',
+ '내 경로 보기 →':'View my route →','Google 지도에서 검색 ↗':'Search on Google Maps ↗',
+ '검색은 Google 지도의 검색 결과로 연결되며, 추천이나 검증된 정보가 아닙니다. 영업 여부와 실제 거리는 지도에서 직접 확인해 주세요.':'Links open Google Maps search results; they are not recommendations or verified information. Please check opening status and actual distance on the map yourself.',
+ // 토스트
+ '내 경로에 장소를 추가했어요.':'Added the place to your route.','이미 경로에 포함된 장소예요.':'This place is already in your route.',
+ '샘플 경로를 내 경로에 불러왔어요.':'Loaded the sample route into your route.','추가할 장소를 선택해 주세요.':'Please choose a place to add.','경로를 초기화했어요.':'Route cleared.',
+ '프로토타입에서는 경로가 현재 화면에만 유지됩니다.':'In this prototype the route only lasts on the current screen.','경로 요약을 복사했어요.':'Route summary copied.',
+ '한국어 화면으로 전환했어요.':'Switched to Korean.',
+ // 지도
+ '상세 보기 ↗':'View details ↗','+ 경로':'+ Route','전체 보기 ':'Show all',
+ '지도가 아직 준비되지 않았어요.':'The map isn’t ready yet.','이 브라우저에서는 위치 기능을 사용할 수 없어요.':'Location isn’t available in this browser.',
+ '위치 권한 없이도 지도를 둘러볼 수 있어요.':'You can still explore the map without location permission.',
+ '지도를 보려면 Google Maps API 키가 필요해요. 상단의 “MAP KEY” 버튼에서 키를 입력해 주세요. (장소 목록과 경로 편집은 계속 사용할 수 있어요.)':'A Google Maps API key is needed to show the map. Enter it with the “MAP KEY” button at the top. (The place list and route editing still work.)',
+ '지도 인증에 실패했어요. API 키의 사용 설정과 허용 도메인을 확인하거나, 상단 “MAP KEY”에서 키를 다시 입력해 주세요. (장소 목록과 경로 편집은 계속 사용할 수 있어요.)':'Map authentication failed. Check that the API key is enabled and the domain is allowed, or re-enter it under “MAP KEY” at the top. (The place list and route editing still work.)',
+ '지도를 불러오지 못했어요. 네트워크 연결을 확인해 주세요. (장소 목록과 경로 편집은 계속 사용할 수 있어요.)':'Couldn’t load the map. Please check your network connection. (The place list and route editing still work.)',
+ // API 키 창
+ 'Google Maps API 키':'Google Maps API key',
+ '키는 이 브라우저(localStorage)에만 저장되며 서버로 전송되지 않아요. 저장하면 페이지가 새로고침됩니다.':'The key is stored only in this browser (localStorage) and is never sent to a server. The page reloads after saving.',
+ '보기':'Show','숨기기':'Hide','저장된 키가 없어요.':'No key saved.','키 삭제':'Delete key','취소':'Cancel','저장':'Save',
+ 'Google Cloud 콘솔에서 Maps JavaScript API를 사용 설정하고, 도보 경로(Directions)를 쓰려면 해당 API도 켜 주세요. 키는 사용할 도메인(HTTP 리퍼러)으로 제한하는 것을 권장해요.':'Enable the Maps JavaScript API in the Google Cloud console, and enable Directions as well to use walking routes. We recommend restricting the key to your domain (HTTP referrer).',
+ 'API 키를 입력해 주세요.':'Please enter an API key.','이 브라우저에서는 키를 저장할 수 없어요.':'This browser can’t store the key.',
+ '일반적인 Google API 키 형식(AIza…)이 아니에요. 그래도 저장할까요?':'This doesn’t look like a standard Google API key (AIza…). Save anyway?'
+};
+const RULES=[
+ [/^↓ 다음 장소까지 도보 (.+)$/,'↓ $1 walk to next stop'],
+ [/(\d+)시간 (\d+)분/g,'$1 h $2 min'],
+ [/(\d+)분/g,'$1 min'],
+ [/(\d+)곳/g,(m,n)=>n+(n==='1'?' place':' places')],
+ [/^현재 저장된 키: /,'Saved key: ']
+];
+const HANGUL=/[가-힣]/;
+const seg=p=>{if(D[p]!==undefined)return D[p];let r=p;for(const [re,rep] of RULES)r=r.replace(re,rep);return r};
+function core(c){
+ if(D[c]!==undefined)return D[c];
+ const parts=c.split(/( · | — )/);
+ return parts.length>1?parts.map((p,i)=>i%2?p:seg(p)).join(''):seg(c);
+}
+function tr(s){const m=s.match(/^(\s*)([\s\S]*?)(\s*)$/);return m[2]?m[1]+core(m[2])+m[3]:s}
+window.tr=tr;
+
+const touched=new Map();                       // text node -> {ko,en}
+const attrs=new Map();                         // element -> {attr: ko}
+const ATTRS=['placeholder','aria-label','title'];
+const skip=el=>{if(!el||/^(SCRIPT|STYLE|NOSCRIPT)$/.test(el.tagName))return true;const g=el.closest('.gmap');return !!g&&!el.closest('.iw')};
+
+function applyAll(){
+ if(!isEnglish)return;
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+ let n;
+ while((n=w.nextNode())){
+  if(!HANGUL.test(n.data)||skip(n.parentElement))continue;
+  const ko=n.data,en=tr(ko);
+  if(en!==ko){touched.set(n,{ko,en});n.data=en}
+ }
+ document.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el=>{
+  if(skip(el))return;
+  ATTRS.forEach(a=>{const v=el.getAttribute(a);if(v&&HANGUL.test(v)){const o=attrs.get(el)||{};o[a]=v;attrs.set(el,o);el.setAttribute(a,tr(v))}});
+ });
+}
+function restoreAll(){
+ touched.forEach((r,n)=>{if(n.isConnected&&n.data===r.en)n.data=r.ko});touched.clear();
+ attrs.forEach((o,el)=>{if(el.isConnected)for(const a in o)el.setAttribute(a,o[a])});attrs.clear();
+}
+
+let queued=false;
+new MutationObserver(()=>{
+ if(!isEnglish||queued)return;
+ queued=true;setTimeout(()=>{queued=false;applyAll()},0);
+}).observe(document.body,{childList:true,subtree:true,characterData:true});
+
+function setLang(en,silent){
+ if(!en)restoreAll();
+ isEnglish=en;
+ try{localStorage.setItem(LANG_KEY,en?'en':'ko')}catch(e){}
+ document.documentElement.lang=en?'en':'ko';
+ document.title=en?TITLE.en:TITLE.ko;
+ $('langBtn').textContent=en?'EN / KR':'KR / EN';
+ refreshThemeBtn();
+ renderHome();renderCatalog();renderRoute(true);renderCommunity();
+ if(currentPage==='detail')openDetail(selectedPlace);
+ if(currentPage==='food')openFood(foodIdx);
+ if(en)applyAll();
+ if(!silent)showToast(en?'Switched to English.':'한국어 화면으로 전환했어요.');
+}
+$('langBtn').onclick=()=>setLang(!isEnglish);
+
+$('shareRoute').onclick=()=>{
+ const text='ROMA / WALK — '+route.map(id=>placeName(id)).join(' → ');
+ if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>showToast('경로 요약을 복사했어요.')).catch(()=>showToast(text));else showToast(text);
+};
+const nativeConfirm=window.confirm;
+window.confirm=m=>nativeConfirm.call(window,isEnglish?tr(m):m);
+
+let saved='ko';try{saved=localStorage.getItem(LANG_KEY)||'ko'}catch(e){}
+if(saved==='en')setLang(true,true);
+})();
+
+</script>
+</body>
+</html>
