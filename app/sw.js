@@ -1,4 +1,4 @@
-const CACHE = 'roma-walk-v8';
+const CACHE = 'roma-walk-v9';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-180.png', 'i18n.js'];
 
 self.addEventListener('install', e => {

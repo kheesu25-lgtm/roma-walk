@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#171717" />
+<meta name="theme-color" content="#eee6d9" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="ROMA/WALK" />
@@ -165,6 +165,286 @@
   .gm-style .gm-style-iw-d{padding:14px 14px 12px!important;overflow:hidden!important;max-height:none!important}
   .gm-style .gm-ui-hover-effect{width:26px!important;height:26px!important;top:6px!important;right:6px!important}
   .gm-style .gm-ui-hover-effect>span{width:14px!important;height:14px!important;margin:6px!important;background-color:#171717!important}
+  /* ---------- ROMA / WALK : warm classical-modern visual refresh ---------- */
+  :root{
+    --bg:#eee6d9;
+    --paper:#faf7f0;
+    --ink:#302820;
+    --muted:#827465;
+    --line:#d9cbb8;
+    --soft:#eee3d2;
+    --dark:#302820;
+    --radius:10px;
+    color-scheme:light;
+  }
+  body{
+    background:var(--bg);
+    background-image:linear-gradient(135deg,rgba(255,255,255,.28),transparent 48%);
+  }
+  .app{
+    background:var(--paper);
+    border-color:var(--line);
+    box-shadow:0 14px 50px rgba(75,53,34,.08);
+  }
+  .topbar{
+    background:rgba(250,247,240,.96);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(12px);
+  }
+  .brand strong{color:#49372b;letter-spacing:.075em}
+  .brand span{color:#9b8069}
+  .nav button{color:#827465;transition:color .2s,border-color .2s}
+  .nav button.active{color:#9b543b;border-color:#a85e42}
+  .lang{
+    border:1px solid #d5c4ad;
+    border-radius:7px;
+    background:#f7f0e5;
+    color:#604b39;
+    transition:background .2s,border-color .2s;
+  }
+  .lang:hover{background:#eee1cf;border-color:#b98a6a}
+  .eyebrow{color:#9b6c50;letter-spacing:.16em}
+  .hero{border-bottom-color:var(--line)}
+  .hero h1{color:#392d24}
+  .hero p{color:#77695b}
+  .hero-stamp{
+    border-color:#b98a6a;
+    border-radius:8px;
+    color:#8d5b40;
+    background:linear-gradient(145deg,#f8f1e6,#eee1cf);
+  }
+  .hero-stamp b{color:#74452f}
+  .section-head{margin-bottom:16px}
+  h2{color:#3c3027}
+  .sub{color:#897969}
+  .text-btn{color:#89563d;text-underline-offset:4px}
+  .text-btn:hover{color:#b36c4c}
+  .chips{gap:8px}
+  .chip{
+    border:1px solid #ddcfbd;
+    border-radius:999px;
+    background:#f8f3ea;
+    color:#766653;
+    padding:9px 14px;
+    transition:all .18s ease;
+  }
+  .chip:hover{border-color:#bd9275;background:#f2e8da}
+  .chip.active{
+    background:#9b563d;
+    border-color:#9b563d;
+    color:#fffaf3;
+    box-shadow:0 3px 9px rgba(126,69,47,.15);
+  }
+  .map-panel{
+    border:1px solid #d6c4ae;
+    border-radius:12px;
+    background:#eee4d3;
+    box-shadow:inset 0 0 0 5px rgba(255,255,255,.22);
+  }
+  .map-panel:before,.map-panel:after{border-color:#d2c1aa}
+  .map-tag{
+    border:1px solid #d8c6b0;
+    border-radius:6px;
+    background:#faf6ed;
+    color:#765a43;
+    box-shadow:0 2px 8px rgba(70,48,29,.06);
+  }
+  .map-ctrl{
+    border:1px solid #d6c4ae;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 3px 12px rgba(64,45,29,.1);
+  }
+  .map-ctrl button{background:#faf7f0;color:#594838}
+  .map-ctrl button+button{border-left:1px solid #e1d4c3}
+  .map-ctrl button:hover{background:#efe3d2}
+  .map-msg{background:#eee4d3;color:#897765}
+  .side-list{border-top-color:#bfa88f}
+  .place-row{
+    border-bottom-color:#e2d7c8;
+    transition:background .18s,padding .18s;
+  }
+  .place-row:hover{background:#f4ecdf}
+  .num{color:#a17a5d}
+  .place-name{color:#3e3026}
+  .place-meta{color:#897969}
+  .place-row.sel{
+    background:#f0e4d4;
+    box-shadow:inset 3px 0 0 #a85e42;
+  }
+  .route-card{border-bottom-color:#e2d7c8}
+  .route-card strong{color:#49372b}
+  .route-badge{
+    border:1px solid #d8c5ad;
+    border-radius:999px;
+    background:#f6eee2;
+    color:#916246;
+  }
+  .outline-btn,.solid-btn{
+    border:1px solid #a85e42;
+    border-radius:7px;
+    padding:11px 15px;
+    transition:all .18s ease;
+  }
+  .outline-btn{background:#fbf7f0;color:#92563d}
+  .outline-btn:hover{background:#f0e3d4;border-color:#92563d}
+  .solid-btn{
+    background:#98543b;
+    border-color:#98543b;
+    color:#fff9f1;
+    box-shadow:0 3px 8px rgba(126,69,47,.12);
+  }
+  .solid-btn:hover{background:#7f432f;border-color:#7f432f}
+  .page-intro{border-bottom-color:var(--line)}
+  .toolbar{gap:9px}
+  .search{
+    border:1px solid #d8c8b5;
+    border-radius:7px;
+    background:#fffdf8;
+    color:#403329;
+    outline:none;
+    transition:border-color .18s,box-shadow .18s;
+  }
+  .search:focus{border-color:#ad7253;box-shadow:0 0 0 3px rgba(168,94,66,.12)}
+  .detail-visual{
+    border:1px solid #d8c8b5;
+    border-radius:10px;
+    background:linear-gradient(145deg,#eee3d1,#e5d4bc);
+    color:#8b7661;
+  }
+  .detail-visual strong{color:#76523b}
+  .detail-copy h2{color:#3b2d23}
+  .detail-copy p{color:#76685a}
+  .fact-grid{border-color:#ddcfbd;border-radius:8px;overflow:hidden}
+  .fact{border-color:#ddcfbd;background:rgba(255,252,246,.55)}
+  .fact span{color:#9a806a}
+  .fact b{color:#49392d}
+  .route-stop{border-bottom-color:#e2d7c8}
+  .stop-controls button{
+    border:1px solid #ddcdbb;
+    border-radius:6px;
+    background:#faf6ef;
+    color:#76533e;
+    transition:background .18s,border-color .18s;
+  }
+  .stop-controls button:hover:not(:disabled){background:#efe2d2;border-color:#bd9275}
+  .recommend-box{
+    border:1px solid #d6c4ae;
+    border-radius:10px;
+    background:#f7f0e5;
+  }
+  .recommend-box h3{color:#49372b}
+  .recommend-box p{color:#7d6d5c}
+  .food-row{border-bottom-color:#e2d7c8}
+  .food-row b{color:#49372b}
+  .food-row small{color:#8b7967}
+  .community-card{
+    border:1px solid #ddcfbd;
+    border-radius:10px;
+    background:linear-gradient(145deg,#fffdf8,#f5ede1);
+    transition:transform .18s,border-color .18s,box-shadow .18s;
+  }
+  .community-card:hover{
+    transform:translateY(-2px);
+    border-color:#c5a184;
+    box-shadow:0 8px 20px rgba(75,53,34,.07);
+  }
+  .community-card .route-number{color:#a17658}
+  .community-card h3{color:#49372b}
+  .community-card p{color:#827363}
+  .notice{border-top-color:#ddcfbd;color:#93816e}
+  .toast{
+    border:1px solid #bd8c6c;
+    border-radius:8px;
+    background:#49372b;
+    color:#fff8ef;
+    box-shadow:0 8px 24px rgba(40,27,18,.2);
+  }
+  footer.site-footer{
+    border-top-color:#cbb79f;
+    background:#f5eee3;
+    color:#927c67;
+  }
+  .modal-bg{background:rgba(48,36,27,.48);backdrop-filter:blur(3px)}
+  .modal{
+    border:1px solid #cdb79e;
+    border-radius:12px;
+    background:#faf7f0;
+    box-shadow:0 16px 50px rgba(36,25,17,.2);
+  }
+  .key-row .search{background:#fffdf8}
+  .key-err{color:#a33f2d}
+  .iw{color:#3e3026}
+  .iw-n{color:#98785e}
+  .iw p{color:#76685a}
+  .gm-style .gm-style-iw-c{
+    border:1px solid #cbb79f!important;
+    border-radius:9px!important;
+    box-shadow:0 8px 24px rgba(50,35,23,.18)!important;
+  }
+  .gm-style .gm-style-iw-d{padding:14px!important}
+  /* Warm charcoal version for the existing dark-mode toggle */
+  :root[data-theme=dark]{
+    --bg:#1d1916;
+    --paper:#28221d;
+    --ink:#f2e9dc;
+    --muted:#b3a08c;
+    --line:#4a3d32;
+    --soft:#382e26;
+    --dark:#28221d;
+    color-scheme:dark;
+  }
+  [data-theme=dark] body{background:#1d1916}
+  [data-theme=dark] .app{background:var(--paper);box-shadow:0 14px 50px rgba(0,0,0,.24)}
+  [data-theme=dark] .topbar,[data-theme=dark] .nav{background:rgba(40,34,29,.97)}
+  [data-theme=dark] .brand strong,[data-theme=dark] h1,[data-theme=dark] h2,
+  [data-theme=dark] .place-name,[data-theme=dark] .route-card strong,
+  [data-theme=dark] .detail-copy h2,[data-theme=dark] .community-card h3{color:#f0e4d4}
+  [data-theme=dark] .brand span,[data-theme=dark] .eyebrow{color:#c18b69}
+  [data-theme=dark] .nav button{color:#b5a28e}
+  [data-theme=dark] .nav button.active{color:#e5a17c;border-top-color:#c77b56;border-bottom-color:#c77b56}
+  [data-theme=dark] .lang,[data-theme=dark] .chip,[data-theme=dark] .outline-btn,
+  [data-theme=dark] .stop-controls button,[data-theme=dark] .map-tag,
+  [data-theme=dark] .map-ctrl,[data-theme=dark] .map-ctrl button{
+    background:#342a22;color:#e8d9c7;border-color:#594638;
+  }
+  [data-theme=dark] .chip.active{background:#a45e42;border-color:#a45e42;color:#fff8ef}
+  [data-theme=dark] .solid-btn{background:#a45e42;border-color:#a45e42;color:#fff8ef}
+  [data-theme=dark] .solid-btn:hover{background:#bd7654}
+  [data-theme=dark] .hero p,[data-theme=dark] .detail-copy p,
+  [data-theme=dark] .recommend-box p,[data-theme=dark] .community-card p{color:#c0ae9b}
+  [data-theme=dark] .hero-stamp,[data-theme=dark] .recommend-box{
+    background:#342a22;border-color:#6c4c38;color:#d6a17e;
+  }
+  [data-theme=dark] .hero-stamp b,[data-theme=dark] .recommend-box h3{color:#f0dfcc}
+  [data-theme=dark] .map-panel,[data-theme=dark] .map-msg{background:#302820}
+  [data-theme=dark] .map-panel:before,[data-theme=dark] .map-panel:after{border-color:#514337}
+  [data-theme=dark] .search{background:#302820;color:#f0e4d4;border-color:#594638}
+  [data-theme=dark] .search:focus{border-color:#c77b56;box-shadow:0 0 0 3px rgba(199,123,86,.16)}
+  [data-theme=dark] .detail-visual{background:linear-gradient(145deg,#3b3027,#302820);border-color:#594638}
+  [data-theme=dark] .detail-visual strong{color:#e1b18d}
+  [data-theme=dark] .fact,[data-theme=dark] .community-card{background:#302820;border-color:#514337}
+  [data-theme=dark] .fact-grid{border-color:#514337}
+  [data-theme=dark] .fact{border-color:#514337}
+  [data-theme=dark] .fact span,[data-theme=dark] .num,
+  [data-theme=dark] .place-meta,[data-theme=dark] .food-row small{color:#b39b83}
+  [data-theme=dark] .fact b,[data-theme=dark] .food-row b{color:#f0e4d4}
+  [data-theme=dark] .place-row:hover,[data-theme=dark] .place-row.sel{background:#382e26}
+  [data-theme=dark] .place-row.sel{box-shadow:inset 3px 0 0 #c77b56}
+  [data-theme=dark] .route-badge{background:#342a22;border-color:#594638;color:#d6a17e}
+  [data-theme=dark] .community-card:hover{border-color:#9b6b4d;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+  [data-theme=dark] footer.site-footer{background:#241e19;border-color:#4a3d32;color:#b39b83}
+  [data-theme=dark] .modal{background:#28221d;border-color:#594638}
+  [data-theme=dark] .toast{background:#f0e4d4;color:#392d24;border-color:#c77b56}
+  [data-theme=dark] .gm-style .gm-style-iw-c{background:#faf7f0!important}
+  @media(min-width:500px){
+    .app{box-shadow:0 16px 55px rgba(75,53,34,.11)}
+  }
+  .gm-style .gm-ui-hover-effect>span{background-color:#6b4a38!important}
+  /* backdrop-filter가 있으면 안쪽의 fixed 하단 탭바가 상단 바 기준으로 배치되므로 제거 */
+  .topbar{backdrop-filter:none;-webkit-backdrop-filter:none}
+  :root{--accent:#98543b}
+  :root[data-theme=dark]{--accent:#d98f6a}
 </style>
 </head>
 <body>
@@ -344,37 +624,37 @@ $('keyRemove').onclick=()=>{try{localStorage.removeItem(KEY_STORE)}catch(err){}l
 const ROME={lat:41.8978,lng:12.4768};
 const COORDS={pantheon:{lat:41.89861,lng:12.47685},navona:{lat:41.89893,lng:12.47307},campo:{lat:41.89558,lng:12.47216},pietra:{lat:41.89968,lng:12.47990},ignazio:{lat:41.89875,lng:12.48038},argentina:{lat:41.89577,lng:12.47683},colosseo:{lat:41.89021,lng:12.49223},foro:{lat:41.89246,lng:12.48531},trevi:{lat:41.90093,lng:12.48331},spagna:{lat:41.90598,lng:12.48282},peter:{lat:41.90217,lng:12.45394},angelo:{lat:41.90306,lng:12.46635},campidoglio:{lat:41.8931,lng:12.48283},bocca:{lat:41.88875,lng:12.48182},vittoriano:{lat:41.89462,lng:12.48316},trastevere:{lat:41.88972,lng:12.46974}};
 const MONO_STYLE=[
- {elementType:'geometry',stylers:[{color:'#f0f0ed'}]},
+ {elementType:'geometry',stylers:[{color:'#efe6d6'}]},
  {elementType:'labels.icon',stylers:[{visibility:'off'}]},
- {elementType:'labels.text.fill',stylers:[{color:'#777777'}]},
- {elementType:'labels.text.stroke',stylers:[{color:'#f6f6f3'}]},
- {featureType:'administrative',elementType:'geometry.stroke',stylers:[{color:'#d8d8d3'}]},
+ {elementType:'labels.text.fill',stylers:[{color:'#8a7662'}]},
+ {elementType:'labels.text.stroke',stylers:[{color:'#faf7f0'}]},
+ {featureType:'administrative',elementType:'geometry.stroke',stylers:[{color:'#d9cbb8'}]},
  {featureType:'poi',stylers:[{visibility:'off'}]},
- {featureType:'poi.park',elementType:'geometry',stylers:[{visibility:'on'},{color:'#e4e4e0'}]},
- {featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},
- {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#d8d8d3'}]},
+ {featureType:'poi.park',elementType:'geometry',stylers:[{visibility:'on'},{color:'#e0dcc6'}]},
+ {featureType:'road',elementType:'geometry',stylers:[{color:'#fbf8f1'}]},
+ {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#ddcfbb'}]},
  {featureType:'transit',stylers:[{visibility:'off'}]},
- {featureType:'water',elementType:'geometry',stylers:[{color:'#d4d4d0'}]}
+ {featureType:'water',elementType:'geometry',stylers:[{color:'#cfd0c4'}]}
 ];
 const DARK_STYLE=[
- {elementType:'geometry',stylers:[{color:'#1f1f1d'}]},
+ {elementType:'geometry',stylers:[{color:'#2b241f'}]},
  {elementType:'labels.icon',stylers:[{visibility:'off'}]},
- {elementType:'labels.text.fill',stylers:[{color:'#8a8a85'}]},
- {elementType:'labels.text.stroke',stylers:[{color:'#121212'}]},
- {featureType:'administrative',elementType:'geometry.stroke',stylers:[{color:'#34342f'}]},
+ {elementType:'labels.text.fill',stylers:[{color:'#b3a08c'}]},
+ {elementType:'labels.text.stroke',stylers:[{color:'#1d1916'}]},
+ {featureType:'administrative',elementType:'geometry.stroke',stylers:[{color:'#4a3d32'}]},
  {featureType:'poi',stylers:[{visibility:'off'}]},
- {featureType:'poi.park',elementType:'geometry',stylers:[{visibility:'on'},{color:'#252523'}]},
- {featureType:'road',elementType:'geometry',stylers:[{color:'#2c2c29'}]},
- {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1a1a18'}]},
+ {featureType:'poi.park',elementType:'geometry',stylers:[{visibility:'on'},{color:'#332a22'}]},
+ {featureType:'road',elementType:'geometry',stylers:[{color:'#3a3028'}]},
+ {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1d1916'}]},
  {featureType:'transit',stylers:[{visibility:'off'}]},
- {featureType:'water',elementType:'geometry',stylers:[{color:'#0e0e0e'}]}
+ {featureType:'water',elementType:'geometry',stylers:[{color:'#17130f'}]}
 ];
 const isDark=()=>document.documentElement.dataset.theme==='dark';
 let mapReady=false,homeMap,routeMap,infoWin,userMarker,mapSel=null,routeReq=0,routeData=null,routeOverlays=[];
 const homeMarkers={};
 function placeName(id){const p=placeById(id);return isEnglish?p.en:p.name}
 function pinIcon(label,active){
- const s=active?40:30,dk=isDark(),A=dk?'#f2f2ee':'#171717',B=dk?'#1a1a1a':'#fff';
+ const s=active?40:30,dk=isDark(),A=dk?'#d98f6a':'#98543b',B=dk?'#28221d':'#faf7f0';
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}"><circle cx="${s/2}" cy="${s/2}" r="${s/2-2}" fill="${active?B:A}" stroke="${A}" stroke-width="${active?3:2}"/><text x="50%" y="50%" dy=".35em" text-anchor="middle" font-family="Arial,sans-serif" font-size="${active?14:11}" font-weight="700" fill="${active?A:B}">${label}</text></svg>`;
  return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg),scaledSize:new google.maps.Size(s,s),anchor:new google.maps.Point(s/2,s/2)};
 }
@@ -437,7 +717,7 @@ function locateMe(){
  navigator.geolocation.getCurrentPosition(pos=>{
   const ll={lat:pos.coords.latitude,lng:pos.coords.longitude};
   if(userMarker)userMarker.setPosition(ll);
-  else userMarker=new google.maps.Marker({position:ll,map:homeMap,title:'현재 위치',zIndex:999,icon:{path:google.maps.SymbolPath.CIRCLE,scale:7,fillColor:isDark()?'#f2f2ee':'#171717',fillOpacity:1,strokeColor:isDark()?'#1a1a1a':'#fff',strokeWeight:3}});
+  else userMarker=new google.maps.Marker({position:ll,map:homeMap,title:'현재 위치',zIndex:999,icon:{path:google.maps.SymbolPath.CIRCLE,scale:7,fillColor:isDark()?'#d98f6a':'#98543b',fillOpacity:1,strokeColor:isDark()?'#28221d':'#faf7f0',strokeWeight:3}});
   homeMap.panTo(ll);homeMap.setZoom(16);
  },()=>showToast('위치 권한 없이도 지도를 둘러볼 수 있어요.'),{timeout:8000});
 }
@@ -489,8 +769,8 @@ function updateRouteMap(){
   if(req!==routeReq)return;
   const r=res.routes[0],path=r.overview_path;
   routeOverlays.push(
-   new google.maps.Polyline({path,map:routeMap,strokeColor:isDark()?'#f2f2ee':'#171717',strokeWeight:7,zIndex:1}),
-   new google.maps.Polyline({path,map:routeMap,strokeColor:isDark()?'#1a1a1a':'#ffffff',strokeWeight:3,zIndex:2})
+   new google.maps.Polyline({path,map:routeMap,strokeColor:isDark()?'#e5a17c':'#7f432f',strokeWeight:7,zIndex:1}),
+   new google.maps.Polyline({path,map:routeMap,strokeColor:isDark()?'#28221d':'#faf7f0',strokeWeight:3,zIndex:2})
   );
   routeMap.fitBounds(r.bounds,60);
   const legs=r.legs.map(l=>({m:l.distance.value,s:l.duration.value}));
@@ -498,7 +778,7 @@ function updateRouteMap(){
   renderRoute(true);
  }).catch(()=>{
   if(req!==routeReq)return;
-  routeOverlays.push(new google.maps.Polyline({path:route.map(id=>COORDS[id]),map:routeMap,strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#777777',scale:3},offset:'0',repeat:'14px'}]}));
+  routeOverlays.push(new google.maps.Polyline({path:route.map(id=>COORDS[id]),map:routeMap,strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#9b8069',scale:3},offset:'0',repeat:'14px'}]}));
   routeData={key,error:true};
   renderRoute(true);
  });
@@ -537,7 +817,7 @@ function refreshThemeBtn(){
 function setTheme(t,persist){
  document.documentElement.dataset.theme=t;
  if(persist){try{localStorage.setItem('romaWalkTheme',t)}catch(e){}}
- const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#121212':'#171717';
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#1d1916':'#eee6d9';
  refreshThemeBtn();applyMapTheme();
 }
 $('themeBtn').onclick=()=>setTheme(isDark()?'light':'dark',true);
