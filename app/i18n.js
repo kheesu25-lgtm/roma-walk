@@ -163,6 +163,7 @@ function setLang(en,silent){
  document.documentElement.lang=en?'en':'ko';
  document.title=en?TITLE.en:TITLE.ko;
  $('langBtn').textContent=en?'EN / KR':'KR / EN';
+ refreshThemeBtn();
  renderHome();renderCatalog();renderRoute(true);renderCommunity();
  if(currentPage==='detail')openDetail(selectedPlace);
  if(currentPage==='food')openFood(foodIdx);
