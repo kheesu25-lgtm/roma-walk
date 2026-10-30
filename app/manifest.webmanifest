@@ -1,0 +1,17 @@
+{
+  "name": "ROMA / WALK — 로마 건축 탐험",
+  "short_name": "ROMA/WALK",
+  "description": "로마 도심의 건축과 명소를 걷고, 나만의 도보 코스를 만드는 지도 앱",
+  "lang": "ko",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#171717",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
